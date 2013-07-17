@@ -12,8 +12,10 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DragAndDropWrapper;
+import com.vaadin.ui.HasComponents;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -67,23 +69,23 @@ public class AbstractFrame extends VerticalLayout {
         header.setComponentAlignment(filter, Alignment.TOP_LEFT);
         header.setExpandRatio(filter, 3);
 
-        final Button download = new Button();
+        final Button download = new Button("D");
         download.setVisible(false);
         header.addComponent(download);
 
         HorizontalLayout actionArea = new HorizontalLayout();
-        final ComboBox actionSelection = new ComboBox();
-        actionSelection.setInputPrompt("Actions");
+        final NativeSelect actionSelection = new NativeSelect();
         for (String action : actions) {
             actionSelection.addItem(action);
         }
         actionSelection.setWidth("100px");
+        actionSelection.setNullSelectionAllowed(false);
         actionSelection.addShortcutListener(new ShortcutListener("Add",
                 ShortcutAction.KeyCode.ENTER, null) {
 
             @Override
             public void handleAction(Object sender, Object target) {
-                doAction(actionSelection, download);
+                doAction((String) actionSelection.getValue(), download);
             }
         });
 
@@ -92,7 +94,7 @@ public class AbstractFrame extends VerticalLayout {
         doButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                doAction(actionSelection, download);
+                doAction((String) actionSelection.getValue(), download);
             }
         });
 
@@ -104,15 +106,15 @@ public class AbstractFrame extends VerticalLayout {
         addComponent(header);
     }
 
-    private void doAction(ComboBox action, Button download) {
-        if (action.getValue() != null && !action.getValue().equals("")) {
+    private void doAction(String action, Button download) {
+        if (action != null && !action.equals("")) {
             List<DeployableEntry> selectedDeployableEntries = new ArrayList<>();
             for (DeployableEntry deployableEntry : deployableEntries) {
                 if (deployableEntry.getCheckBox().getValue()) {
                     selectedDeployableEntries.add(deployableEntry);
                 }
             }
-            switch (action.getValue().toString()) {
+            switch (action) {
                 case DeploymentActions.DEPLOY:
                     deploymentView.deploy(selectedDeployableEntries);
                     break;
