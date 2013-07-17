@@ -13,7 +13,6 @@ package com.peergreen.webconsole.scope.deployment.components;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.IDeploymentView;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Upload;
 
 import java.io.File;
@@ -40,9 +39,9 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
     public OutputStream receiveUpload(String filename, String mimeType) {
         try {
             String fileLocation = Constants.STORAGE_DIRECTORY + File.separator + filename;
-            if ((new File(fileLocation)).exists()) {
-                Notification.show("File '" + filename + "' already exists !");
-                return null;
+            File file = new File(fileLocation);
+            if (file.exists()) {
+                file.delete();
             }
             return new FileOutputStream(fileLocation, true);
         } catch (FileNotFoundException e) {

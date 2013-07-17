@@ -119,13 +119,17 @@ public class DeploymentScope extends VerticalLayout implements IDeploymentView {
     @Override
     public void addDeployable(final String filename) {
         URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + filename).toURI();
-        deployableFrame.addDeployableEntry(uri);
+        if (!deployableFrame.containsDeployableEntry(uri)) {
+            deployableFrame.addDeployableEntry(uri);
+        }
     }
 
     @Override
     public void addToDeployed(String filename) {
         URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + filename).toURI();
-        deployedFrame.addDeployableEntry(uri);
+        if (!deployedFrame.containsDeployableEntry(uri)) {
+            deployedFrame.addDeployableEntry(uri);
+        }
     }
 
     @Override
