@@ -1,0 +1,107 @@
+.deployable-entry { 
+    background : -webkit-linear-gradient(top, #ffffff 0%, #fafafa 5%, #eaebec 94%, #e2e3e4 100%);
+    padding : 10px !important;
+    width : 100%;
+    border: 0.1em solid #b3b4b5;
+    border-top-color: #d4d4d6;
+    border-bottom-color: #989b9c;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.v-table-row-deployed-entry {
+    background : -webkit-linear-gradient(top, #ffffff 0%, #fafafa 5%, #eaebec 94%, #e2e3e4 100%);
+    padding : 5px !important;
+    width : 100%;
+    border: 0.1em solid #b3b4b5;
+    border-top-color: #d4d4d6;
+    border-bottom-color: #989b9c;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.deployable-entry input {
+    padding-right : 10px;
+}
+
+.deployment-view {
+    background: #dfe0e1;
+    background: -moz-linear-gradient(top, #d8d9da 0%, #e6e7e8 10%, #e0e1e2 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d8d9da), color-stop(10%, #e6e7e8), color-stop(100%, #e0e1e2));
+    background: -webkit-linear-gradient(top, #d8d9da 0%, #e6e7e8 10%, #e0e1e2 100%);
+    background: -o-linear-gradient(top, #d8d9da 0%, #e6e7e8 10%, #e0e1e2 100%);
+    background: -ms-linear-gradient(top, #d8d9da 0%, #e6e7e8 10%, #e0e1e2 100%);
+}
+
+.deployment-view .v-caption {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #349aff;
+    font-size: 14px;
+}
+
+.deployable-style {
+    background : #fff;
+    height : 100%
+}
+
+.deployed-style {
+    background : #fff;
+    border: 1px solid #d3d6d6;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    height : 100%
+}
+
+.drop-area {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    padding: 10px;
+    border: 4px dashed #a4a4a2;
+}
+
+.drop-area .v-label {
+    color: #919083;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.v-tree-node-deployable-active {
+    display : block;
+}
+
+.v-tree-node-deployable-hidden {
+    display : none;
+}
+
+/* Lay the options horizontally */
+.v-select-optiongroup-horizontal .v-select-option {
+    display: inline-block !important;
+}
+
+/* Avoid wrapping if the layout is too tight */
+.v-select-optiongroup-horizontal {
+    white-space: nowrap;
+}
+
+/* Some extra spacing is needed */
+.v-select-optiongroup-horizontal
+  .v-select-option.v-radiobutton {
+    padding-right: 10px;
+}
