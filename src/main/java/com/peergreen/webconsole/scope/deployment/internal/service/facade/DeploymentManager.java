@@ -1,4 +1,4 @@
-package com.peergreen.webconsole.scope.deployment.service;
+package com.peergreen.webconsole.scope.deployment.internal.service.facade;
 
 import com.peergreen.deployment.ArtifactProcessRequest;
 import com.peergreen.deployment.report.ArtifactStatusReport;

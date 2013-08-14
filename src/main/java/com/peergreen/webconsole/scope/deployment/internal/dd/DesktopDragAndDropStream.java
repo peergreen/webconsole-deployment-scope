@@ -1,11 +1,14 @@
-package com.peergreen.webconsole.scope.deployment.dd;
+package com.peergreen.webconsole.scope.deployment.internal.dd;
 
+import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.IDeploymentView;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
 import com.vaadin.server.StreamVariable;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URI;
 
 /**
  * @author Mohammed Boukada
@@ -14,20 +17,16 @@ public class DesktopDragAndDropStream implements StreamVariable {
     private FileOutputStream fos;
     private String fileName;
     private INotifierService notifierService;
-    private IDeploymentView deploymentView;
-    private boolean deploy;
+    private DeployableContainer deployableContainer;
 
     public DesktopDragAndDropStream(FileOutputStream fos,
                                     String fileName,
                                     INotifierService notifierService,
-                                    IDeploymentView deploymentView,
-                                    boolean deploy
-    ) {
+                                    DeployableContainer deployableContainer) {
         this.fos = fos;
         this.fileName = fileName;
         this.notifierService = notifierService;
-        this.deploymentView = deploymentView;
-        this.deploy = deploy;
+        this.deployableContainer = deployableContainer;
     }
 
     @Override
@@ -53,12 +52,8 @@ public class DesktopDragAndDropStream implements StreamVariable {
     @Override
     public void streamingFinished(StreamVariable.StreamingEndEvent event) {
         notifierService.stopTask(this);
-        if (deploy) {
-            deploymentView.addToDeployed(fileName);
-        }
-        else {
-            deploymentView.addDeployable(fileName);
-        }
+        URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + fileName).toURI();
+        deployableContainer.receive(uri);
         notifierService.addNotification("'" + fileName + "' was uploaded.");
     }
 

@@ -8,31 +8,41 @@
  * limitations under the License.
  */
 
-package com.peergreen.webconsole.scope.deployment.components;
+package com.peergreen.webconsole.scope.deployment.internal.components;
 
+import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.IDeploymentView;
+import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Upload;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URI;
+
+import static com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType.*;
+
 
 /**
  * @author Mohammed Boukada
  */
 public class FileUploader implements Upload.Receiver, Upload.SucceededListener, Upload.FailedListener, Upload.StartedListener, Upload.ProgressListener {
 
-    private IDeploymentView deployment;
+    private DeploymentViewManager deploymentViewService;
     private INotifierService notifierService;
+    private ArtifactBuilder artifactBuilder;
+    private OptionGroup option;
 
-    public FileUploader(IDeploymentView deployment, INotifierService notifierService) {
+    public FileUploader(DeploymentViewManager deploymentViewService, INotifierService notifierService, ArtifactBuilder artifactBuilder, OptionGroup option) {
         (new File(Constants.STORAGE_DIRECTORY)).mkdirs();
 
-        this.deployment = deployment;
+        this.deploymentViewService = deploymentViewService;
         this.notifierService = notifierService;
+        this.artifactBuilder = artifactBuilder;
+        this.option = option;
     }
 
     @Override
@@ -53,8 +63,19 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
     @Override
     public void uploadSucceeded(Upload.SucceededEvent event) {
         notifierService.stopTask(this);
-        notifierService.addNotification("'" + event.getFilename() + "' was uploaded.");
-        deployment.addDeployable(event.getFilename());
+        notifierService.addNotification(String.format("'%s' was uploaded.", event.getFilename()));
+        URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + event.getFilename()).toURI();
+        String optionValue = (String) option.getValue();
+
+        if (DEPLOYED.attribute().equals(optionValue)) {
+            deploymentViewService.deploy(artifactBuilder.build(event.getFilename(), uri));
+        } else if (DEPLOYMENT_PLAN.attribute().equals(optionValue)) {
+            deploymentViewService.addToDeployable(uri);
+            deploymentViewService.addToDeploymentPlan(uri);
+            deploymentViewService.showDeploymentPlanView();
+        } else {
+            deploymentViewService.addToDeployable(uri);
+        }
     }
 
     @Override
