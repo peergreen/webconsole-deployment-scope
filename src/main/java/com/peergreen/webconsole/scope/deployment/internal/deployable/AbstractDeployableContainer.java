@@ -3,11 +3,11 @@ package com.peergreen.webconsole.scope.deployment.internal.deployable;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
-import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.UIContext;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.DirectoryDeployableFetcher;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.MavenDeployableFetcher;
 import com.vaadin.data.Item;
@@ -35,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class AbstractDeployableContainer extends VerticalLayout implements DeployableContainer {
     public final static String DEPLOYABLE_NAME = "Deployables";
-    public final static String MVN_REPOSITORY = "r";
     public final static String MVN_GROUP_ID = "g";
     public final static String MVN_ARTIFACT_ID = "a";
     public final static String MVN_VERSION = "v";
@@ -45,15 +44,18 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     public final static String JAR_EXTENSION = ".jar";
     public final static String WAR_EXTENSION = ".war";
 
+    private DeployableSource deployableSource;
+
     protected TreeTable tree = new TreeTable();
     protected HierarchicalContainer container = new HierarchicalContainer();
-    protected Label fetching = new Label("Fetching deployables ...");
+    protected Label fetching = new Label("");
 
     private UIContext uiContext;
-    private INotifierService notifierService;
     private ArtifactModelManager artifactModelManager;
 
-    protected AbstractDeployableContainer() {
+    protected AbstractDeployableContainer(DeployableSource deployableSource) {
+        this.deployableSource = deployableSource;
+
         container.addContainerProperty(DEPLOYABLE_NAME, String.class, null);
         container.addContainerProperty(ICON, Resource.class, null);
 
@@ -80,13 +82,15 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         tree.setColumnCollapsed(MVN_GROUP_ID, true);
         tree.setColumnCollapsed(MVN_ARTIFACT_ID, true);
         tree.setColumnCollapsed(MVN_VERSION, true);
+        tree.setSortContainerPropertyId(DEPLOYABLE_NAME);
+        tree.setSortAscending(true);
+        tree.addItemClickListener(new TreeItemClickListener());
         fetching.setVisible(false);
     }
 
-    protected void init(UIContext uiContext, ArtifactModelManager artifactModelManager, INotifierService notifierService) {
+    protected void init(UIContext uiContext, ArtifactModelManager artifactModelManager) {
         this.uiContext = uiContext;
         this.artifactModelManager = artifactModelManager;
-        this.notifierService = notifierService;
     }
 
     @Override
@@ -103,22 +107,27 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     @Override
     public void addDeployable(DeployableEntry deployableEntry) {
         if (getDeployable(deployableEntry.getUri()) == null
-                && DeployableSource.FILE.equals(deployableEntry.getSource())) {
+                && (deployableSource == null || deployableSource.equals(deployableEntry.getSource()))) {
             deployableEntry.setContainer(this);
 
             String url = deployableEntry.getUri().toString();
-            String parentUrl = url.substring(0, url.lastIndexOf(File.separator) + 1);
+            String parentUrl = url.substring(0, url.lastIndexOf(File.separator));
 
-            try {
-                DeployableEntry parent = getDeployable(new URI(parentUrl));
-                if (parent != null) {
-                    deployableEntry.setParent(parent);
+            if (deployableEntry.getParent() == null) {
+                try {
+                    URI parentUri = new URI(parentUrl);
+                    DeployableEntry parent = getDeployable(parentUri);
+                    if (parent != null) {
+                        deployableEntry.setParent(parent);
+                    }
+                } catch (URISyntaxException e) {
+                    // do nothing
                 }
-            } catch (URISyntaxException e) {
-                // do nothing
             }
 
-            addItemToContainer(deployableEntry, getContainerProperties(deployableEntry));
+            if (!(deployableEntry instanceof MavenDeployableEntry && deployableEntry.getParent() == null)) {
+                addItemToContainer(deployableEntry, getContainerProperties(deployableEntry));
+            }
         }
     }
 
@@ -201,6 +210,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
                 }
                 if (deployableEntry.getParent() != null) {
                     container.setParent(deployableEntry, deployableEntry.getParent());
+                    tree.setCollapsed(deployableEntry.getParent(), false);
                 }
                 container.setChildrenAllowed(deployableEntry, !deployableEntry.isDeployable());
             }
