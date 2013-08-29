@@ -190,10 +190,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
 
     private void refresh() {
         for (URI uri : artifactModelManager.getDeployedRootURIs()) {
-            if (getDeployable(uri) == null) {
-                DeployableEntry deployableEntry = new DeployableEntry(uri, DeployableSource.FILE);
-                addDeployable(deployableEntry);
-            }
+            addDeployable(deploymentViewManager.getDeployableEntry(uri));
         }
     }
 

@@ -22,4 +22,6 @@ public interface DeploymentViewManager {
 
     void showDeploymentPlanView();
     void showDeployedView();
+
+    DeployableEntry getDeployableEntry(URI uri);
 }

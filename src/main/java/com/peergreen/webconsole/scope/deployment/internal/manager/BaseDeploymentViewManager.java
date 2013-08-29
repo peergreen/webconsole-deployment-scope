@@ -7,6 +7,7 @@ import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.service.Deployer;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -94,6 +95,7 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
             deployableEntry = new DeployableEntry(uri, DeployableSource.FILE);
         }
         deploymentPlanContainer.addDeployable(deployableEntry);
+        showDeploymentPlanView();
     }
 
     @Override
@@ -175,5 +177,29 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
             framesContainer.removeComponent(deploymentPlanContainer.getView());
             framesContainer.addComponent(deployedContainer.getView());
         }
+    }
+
+    @Override
+    public DeployableEntry getDeployableEntry(URI uri) {
+        DeployableEntry deployableEntry = deployedContainer == null ? null  : deployableContainer.getDeployable(uri);
+        if (deployableEntry == null) {
+            deployableEntry = deployedContainer == null ? null : deployedContainer.getDeployable(uri);
+            if (deployableEntry == null) {
+                DeployableSource deployableSource = getDeployableSource(uri);
+                if (DeployableSource.MAVEN.equals(deployableSource)) {
+                    deployableEntry = new MavenDeployableEntry(uri, deployableSource, null);
+                } else {
+                    deployableEntry = new DeployableEntry(uri, deployableSource);
+                }
+            }
+        }
+        return deployableEntry;
+    }
+
+    private DeployableSource getDeployableSource(URI uri) {
+        if (uri.toString().startsWith("mvn:")) {
+            return DeployableSource.MAVEN;
+        }
+        return DeployableSource.FILE;
     }
 }
