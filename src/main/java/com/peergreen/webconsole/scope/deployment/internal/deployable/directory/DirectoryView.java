@@ -92,7 +92,7 @@ public class DirectoryView extends AbstractDeployableContainer {
         final TextField filter = new TextField();
         filter.setInputPrompt("Filter deployable files");
         filter.setWidth("100%");
-        filter.addTextChangeListener(new FilterFiles(container, DEPLOYABLE_NAME));
+        filter.addTextChangeListener(new FilterFiles(DEPLOYABLE_NAME, container));
         header.addComponent(filter);
         header.setComponentAlignment(filter, Alignment.TOP_LEFT);
         header.setExpandRatio(filter, 3);

@@ -199,8 +199,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
 
     @Override
     public void addDeployable(final DeployableEntry deployableEntry) {
-        if (!artifactModelManager.getDeployedRootURIs().contains(deployableEntry.getUri()) &&
-                getDeployable(deployableEntry.getUri()) == null) {
+        if (getDeployable(deployableEntry.getUri()) == null) {
             final DeployableEntry clone = cloneEntry(deployableEntry, null);
             uiContext.getUI().access(new Runnable() {
                 @Override
@@ -249,6 +248,11 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
     @Override
     public Component getView() {
         return this;
+    }
+
+    @Override
+    public HierarchicalContainer getContainer() {
+        return container;
     }
 
     private String getDefaultName() {

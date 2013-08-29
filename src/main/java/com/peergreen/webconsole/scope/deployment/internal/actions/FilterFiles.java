@@ -9,22 +9,24 @@ import com.vaadin.event.FieldEvents;
  */
 public class FilterFiles implements FieldEvents.TextChangeListener {
 
-    private Container.Filterable container;
+    private Container.Filterable[] containers;
     private String itemId;
     private Container.Filter filter;
 
-    public FilterFiles(Container.Filterable container, String itemId) {
-        this.container = container;
+    public FilterFiles(String itemId, Container.Filterable... containers) {
+        this.containers = containers;
         this.itemId = itemId;
     }
 
     @Override
     public void textChange(FieldEvents.TextChangeEvent event) {
-        if (filter != null) {
-            container.removeContainerFilter(filter);
+        for (Container.Filterable container : containers) {
+            if (filter != null) {
+                container.removeContainerFilter(filter);
+            }
+            filter = new SimpleStringFilter(itemId, event.getText().trim(), true, false);
+            container.addContainerFilter(filter);
         }
-        filter = new SimpleStringFilter(itemId, event.getText().trim(), true, false);
-        container.addContainerFilter(filter);
     }
 
 }

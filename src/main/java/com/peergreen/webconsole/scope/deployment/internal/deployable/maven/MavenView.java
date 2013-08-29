@@ -56,19 +56,19 @@ public class MavenView extends AbstractDeployableContainer {
 
         final TextField filterG = new TextField();
         filterG.setInputPrompt("Filter by group id");
-        filterG.addTextChangeListener(new FilterFiles(container, MVN_GROUP_ID));
+        filterG.addTextChangeListener(new FilterFiles(MVN_GROUP_ID, container));
         header.addComponent(filterG);
         header.setComponentAlignment(filterG, Alignment.TOP_LEFT);
 
         final TextField filterA = new TextField();
         filterA.setInputPrompt("Filter by artifact id");
-        filterA.addTextChangeListener(new FilterFiles(container, MVN_ARTIFACT_ID));
+        filterA.addTextChangeListener(new FilterFiles(MVN_ARTIFACT_ID, container));
         header.addComponent(filterA);
         header.setComponentAlignment(filterA, Alignment.TOP_LEFT);
 
         final TextField filterV = new TextField();
         filterV.setInputPrompt("Filter by version");
-        filterV.addTextChangeListener(new FilterFiles(container, MVN_VERSION));
+        filterV.addTextChangeListener(new FilterFiles(MVN_VERSION, container));
         header.addComponent(filterV);
         header.setComponentAlignment(filterV, Alignment.TOP_LEFT);
 

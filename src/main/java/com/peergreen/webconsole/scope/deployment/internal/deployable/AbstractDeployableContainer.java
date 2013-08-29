@@ -152,12 +152,17 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         return this;
     }
 
+    @Override
+    public HierarchicalContainer getContainer() {
+        return container;
+    }
+
     protected Resource getResource(DeployableEntry deployableEntry) {
         if (!deployableEntry.isDeployable()) {
             return new ClassResource(getClass(), "/images/16x16/directory-icon.png");
         } else {
             String name = deployableEntry.getName();
-            String extension = name.substring(name.lastIndexOf('.'));
+            String extension = name.contains(".") ? name.substring(name.lastIndexOf('.')) : "";
             switch (extension) {
                 case XML_EXTENSION :
                     return new ClassResource(getClass(), "/images/16x16/xml-icon.png");

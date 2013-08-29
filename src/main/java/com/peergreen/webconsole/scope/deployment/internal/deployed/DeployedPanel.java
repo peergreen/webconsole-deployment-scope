@@ -8,18 +8,18 @@ import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.actions.SelectAll;
+import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TableItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.ShortcutAction;
@@ -88,7 +88,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         TextField filter = new TextField();
         filter.setInputPrompt("Filter deployed artifacts");
         filter.setWidth("100%");
-        filter.addTextChangeListener(new FilterFiles(container, TREE_ITEM_ID));
+        filter.addTextChangeListener(new FilterFiles(TREE_ITEM_ID, container));
         toolBar.addComponent(filter);
         toolBar.setComponentAlignment(filter, Alignment.TOP_LEFT);
         toolBar.setExpandRatio(filter, 3);
@@ -180,6 +180,11 @@ public class DeployedPanel extends Panel implements DeployableContainer {
     @Override
     public Component getView() {
         return this;
+    }
+
+    @Override
+    public HierarchicalContainer getContainer() {
+        return container;
     }
 
     @Override

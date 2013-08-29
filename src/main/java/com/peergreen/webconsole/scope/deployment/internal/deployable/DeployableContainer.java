@@ -1,6 +1,7 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable;
 
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.Component;
 
 import java.net.URI;
@@ -19,4 +20,5 @@ public interface DeployableContainer {
     DeployableEntry getDeployable(URI uri);
 
     Component getView();
+    HierarchicalContainer getContainer();
 }
