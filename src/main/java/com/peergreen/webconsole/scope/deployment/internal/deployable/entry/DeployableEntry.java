@@ -26,7 +26,11 @@ public class DeployableEntry {
     public DeployableEntry(URI uri, String name, DeployableSource source, DeployableContainer container, DeployableEntry parent) {
         this.uri = uri;
         if (name == null || "".equals(name)) {
-            name = new File(uri).getName();
+            try {
+                name = new File(uri).getName();
+            } catch (IllegalArgumentException e) {
+                name = uri.toString();
+            }
         }
         this.name = name;
         this.source = source;
