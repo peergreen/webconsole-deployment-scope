@@ -3,6 +3,7 @@ package com.peergreen.webconsole.scope.deployment.internal.deployable.maven;
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.MavenRepositoryService;
+import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
@@ -15,6 +16,7 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListene
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.ui.Alignment;
@@ -22,7 +24,9 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
+import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.Unbind;
 
 /**
  * @author Mohammed Boukada
@@ -42,12 +46,30 @@ public class MavenView extends AbstractDeployableContainer {
     private ArtifactModelManager artifactModelManager;
     @Inject
     private DeploymentViewManager deploymentViewManager;
+    @Inject
+    private RepositoryManager repositoryManager;
     @Requires(filter = "(repository.type=" + RepositoryType.FACADE + ")")
     private MavenRepositoryService mavenRepositoryService;
 
+    protected MavenView() {
+        super(DeployableSource.MAVEN);
+    }
+
+    @Bind(aggregate = true, optional = true, filter = "(!(repository.type=" + RepositoryType.FACADE +"))")
+    public void bindMavenRepositoryService(MavenRepositoryService mavenRepositoryService) {
+        updateTree();
+    }
+
+    @Unbind
+    public void unbindMavenRepositoryService(MavenRepositoryService mavenRepositoryService) {
+        updateTree();
+    }
+
     @Ready
     public void init() {
-        super.init(uiContext, artifactModelManager, notifierService);
+        super.init(uiContext, artifactModelManager);
+
+        repositoryManager.addRepository("https://forge.peergreen.com/repository/content/repositories/releases", "Peergreen Releases", RepositoryType.MAVEN);
 
         HorizontalLayout header = new HorizontalLayout();
         header.setWidth("100%");

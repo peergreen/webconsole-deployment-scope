@@ -24,24 +24,12 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
-import org.apache.felix.ipojo.ComponentInstance;
-import org.apache.felix.ipojo.ConfigurationException;
-import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
 import org.apache.felix.ipojo.annotations.Bind;
-import org.apache.felix.ipojo.annotations.Invalidate;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.osgi.framework.Bundle;
+import org.apache.felix.ipojo.annotations.Unbind;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
 
 /**
  * @author Mohammed Boukada
@@ -51,13 +39,10 @@ import java.util.List;
 @Deployable("directory")
 public class DirectoryView extends AbstractDeployableContainer {
 
-    public final static String DIRECTORY_FACTORY_PID = "com.peergreen.deployment.repository.directory";
-
-    @Requires(from = DIRECTORY_FACTORY_PID)
-    Factory directoryRepositoryFactory;
     @Requires(filter = "(repository.type=" + RepositoryType.FACADE + ")")
     private DirectoryRepositoryService directoryRepositoryService;
-    private List<ComponentInstance> componentInstances = new ArrayList<>();
+    @Inject
+    private RepositoryManager repositoryManager;
 
     @Inject
     private INotifierService notifierService;
@@ -72,17 +57,30 @@ public class DirectoryView extends AbstractDeployableContainer {
     @Inject
     BundleContext bundleContext;
 
-    @Bind(aggregate = true, optional = true, filter = "(repository.type=" + RepositoryType.LOCAL +")")
+    protected DirectoryView() {
+        super(DeployableSource.FILE);
+    }
+
+    @Bind(aggregate = true, optional = true, filter = "(!(repository.type=" + RepositoryType.FACADE +"))")
     public void bindDirectoryRepositoryService(DirectoryRepositoryService directoryRepositoryService) {
+        updateTree();
+    }
+
+    @Unbind
+    public void unbindDirectoryRepositoryService(DirectoryRepositoryService directoryRepositoryService) {
         updateTree();
     }
 
     @Ready
     public void init() {
-        super.init(uiContext, artifactModelManager, notifierService);
+        super.init(uiContext, artifactModelManager);
 
-        checkDirectoryRepositoryService(Constants.STORAGE_DIRECTORY);
-        checkDirectoryRepositoryService(System.getProperty("user.dir") + File.separator + "deploy");
+        repositoryManager.addRepository(new File(Constants.STORAGE_DIRECTORY).toURI().toString(), "Temporary directory", RepositoryType.DIRECTORY);
+        repositoryManager.addRepository(new File(System.getProperty("user.dir") + File.separator + "deploy").toURI().toString(), "Deploy", RepositoryType.DIRECTORY);
+        File m2 = new File(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository");
+        if (m2.exists()) {
+            repositoryManager.addRepository(m2.toURI().toString(), "Local M2 repository", RepositoryType.DIRECTORY);
+        }
 
         HorizontalLayout header = new HorizontalLayout();
         header.setWidth("100%");
@@ -130,51 +128,5 @@ public class DirectoryView extends AbstractDeployableContainer {
                 updateTree(directoryRepositoryService);
             }
         });
-    }
-
-    private void checkDirectoryRepositoryService(String url) {
-        //String filter = String.format("(&(%s=%s)(%s=%s))", "architecture.instance", DIRECTORY_FACTORY_PID + "*", "repository.url", url);
-        //if (getServiceReferences(bundleContext.getBundle(), Architecture.class.getName(), filter).length == 0) {
-            try {
-                String name = url.substring(url.lastIndexOf(File.separator));
-                Dictionary<String, Object> properties = new Hashtable<>();
-                properties.put("repository.type", RepositoryType.LOCAL);
-                properties.put("repository.name", name);
-                properties.put("repository.url", url);
-                componentInstances.add(directoryRepositoryFactory.createComponentInstance(properties));
-            } catch (MissingHandlerException | ConfigurationException | UnacceptableConfiguration e) {
-                // do nothing
-            }
-        //}
-    }
-
-    private static ServiceReference[] getServiceReferences(Bundle bundle, String itf, String filter) {
-        ServiceReference[] refs;
-        try {
-            // Get all the service references
-            refs = bundle.getBundleContext().getServiceReferences(itf, filter);
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalArgumentException(
-                    "Cannot get service references: " + e.getMessage());
-        }
-        if (refs == null) {
-            return new ServiceReference[0];
-        } else {
-            return refs;
-        }
-    }
-
-    @Invalidate
-    public void stop() {
-        for (ComponentInstance instance : componentInstances) {
-            instance.stop();
-            instance.dispose();
-        }
-    }
-
-    @Override
-    public void attach() {
-        super.attach();
-        updateTree();
     }
 }
