@@ -174,56 +174,14 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     protected abstract void updateTree();
 
     protected void updateTree(DirectoryRepositoryService directoryRepositoryService) {
-//        Graph<BaseNode> graph = directoryRepositoryService.list("");
-//        for (Node<BaseNode> node : graph.getNodes()) {
-//            buildNode(node, null);
-//        }
         DirectoryDeployableFetcher fetcher = new DirectoryDeployableFetcher(this, directoryRepositoryService);
         fetcher.start();
     }
 
     protected void updateTree(MavenRepositoryService mavenRepositoryService) {
-//        Graph<MavenNode> graph = mavenRepositoryService.list();
-//        for (Node<MavenNode> node : graph.getNodes()) {
-//            buildNode(node, null);
-//        }
         MavenDeployableFetcher fetcher = new MavenDeployableFetcher(this, mavenRepositoryService);
         fetcher.start();
     }
-
-//    private void buildNode(Node<?> node, DeployableEntry parent) {
-//        DeployableEntry deployableEntry = addItemToTree(node, parent);
-//        if (!node.getChildren().isEmpty() && deployableEntry != null) {
-//            for (Node<?> child : node.getChildren()) {
-//                buildNode(child, deployableEntry);
-//            }
-//        }
-//    }
-//
-//    private DeployableEntry addItemToTree(Node<?> node, DeployableEntry parent) {
-//        BaseNode data = (BaseNode) node.getData();
-//        if (artifactModelManager.getDeployedRootURIs().contains(data.getUri())) {
-//            return null;
-//        }
-//
-//        DeployableEntry deployableEntry;
-//        if (getDeployable(data.getUri()) != null) {
-//            deployableEntry = getDeployable(data.getUri());
-//            if (container.containsId(deployableEntry)) {
-//                return deployableEntry;
-//            }
-//        } else {
-//            if (data instanceof MavenNode) {
-//                deployableEntry = new MavenDeployableEntry(data.getUri(), data.getName(), DeployableSource.MAVEN, this, parent, ((MavenNode) data).getArtifactInfo());
-//            } else {
-//                deployableEntry = new DeployableEntry(data.getUri(), data.getName(), DeployableSource.FILE, this, parent);
-//            }
-//            deployableEntry.setDeployable(data.isLeaf());
-//        }
-//        addItemToContainer(deployableEntry, getContainerProperties(deployableEntry));
-//
-//        return deployableEntry;
-//    }
 
     public void addItemToContainer(final DeployableEntry deployableEntry, final Map<String, Object> properties) {
         uiContext.getUI().access(new Runnable() {
@@ -259,11 +217,11 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         return properties;
     }
 
-    public void startFetching() {
+    public void startFetching(final String message) {
         uiContext.getUI().access(new Runnable() {
             @Override
             public void run() {
-                fetching.setVisible(true);
+                fetching.setValue(message);
             }
         });
     }
@@ -272,20 +230,19 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         uiContext.getUI().access(new Runnable() {
             @Override
             public void run() {
-                fetching.setVisible(false);
+                fetching.setValue("");
+                tree.sort();
             }
         });
     }
 
-    public HierarchicalContainer getContainer() {
-        return container;
-    }
-
-    public INotifierService getNotifierService() {
-        return notifierService;
-    }
-
     public ArtifactModelManager getArtifactModelManager() {
         return artifactModelManager;
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        updateTree();
     }
 }

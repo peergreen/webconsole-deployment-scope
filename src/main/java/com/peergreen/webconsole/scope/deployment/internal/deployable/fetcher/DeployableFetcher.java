@@ -10,6 +10,8 @@ import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.Deplo
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
 import com.vaadin.data.util.HierarchicalContainer;
 
+import java.net.URI;
+
 /**
  * @author Mohammed Boukada
  */
@@ -18,6 +20,8 @@ public abstract class DeployableFetcher extends Thread {
     protected AbstractDeployableContainer deployableContainer;
     protected HierarchicalContainer container;
     protected ArtifactModelManager artifactModelManager;
+    protected DeployableEntry parent;
+    protected URI uri;
 
     protected DeployableFetcher(AbstractDeployableContainer deployableContainer,
                                 HierarchicalContainer container,
@@ -27,13 +31,11 @@ public abstract class DeployableFetcher extends Thread {
         this.artifactModelManager = artifactModelManager;
     }
 
-    protected void  buildNode(Node<?> node, DeployableEntry parent, DeployableEntry stopNode, boolean fetchAll) {
+    protected void buildNode(Node<?> node, DeployableEntry parent) {
         DeployableEntry deployableEntry = addItemToTree(node, parent);
-        if (!node.getChildren().isEmpty()
-                && deployableEntry != null
-                && (fetchAll || deployableEntry.getParent() != stopNode)) {
+        if (!node.getChildren().isEmpty() && deployableEntry != null && parent != null) {
             for (Node<?> child : node.getChildren()) {
-                buildNode(child, deployableEntry, stopNode, fetchAll);
+                buildNode(child, deployableEntry);
             }
         }
     }
@@ -60,5 +62,13 @@ public abstract class DeployableFetcher extends Thread {
         deployableContainer.addItemToContainer(deployableEntry, deployableContainer.getContainerProperties(deployableEntry));
 
         return deployableEntry;
+    }
+
+    public void setParent(DeployableEntry parent) {
+        this.parent = parent;
+    }
+
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 }

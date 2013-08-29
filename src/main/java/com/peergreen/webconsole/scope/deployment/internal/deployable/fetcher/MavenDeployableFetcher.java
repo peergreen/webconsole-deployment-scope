@@ -1,13 +1,12 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher;
 
-import com.peergreen.deployment.repository.Graph;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.Node;
+import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.deployment.repository.maven.MavenNode;
-import com.peergreen.deployment.repository.search.Query;
-import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+
+import java.util.List;
 
 /**
  * @author Mohammed Boukada
@@ -15,36 +14,32 @@ import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.Deplo
 public class MavenDeployableFetcher extends DeployableFetcher {
 
     private MavenRepositoryService mavenRepositoryService;
-    private INotifierService notifierService;
-    private Query[] queries;
-    private DeployableEntry stopNode;
+    private MavenArtifactInfo.Type type;
 
     public MavenDeployableFetcher(AbstractDeployableContainer deployableContainer,
-                                  MavenRepositoryService mavenRepositoryService,
-                                  Query... queries) {
+                                  MavenRepositoryService mavenRepositoryService) {
         super(deployableContainer, deployableContainer.getContainer(), deployableContainer.getArtifactModelManager());
-        this.notifierService = deployableContainer.getNotifierService();
         this.mavenRepositoryService = mavenRepositoryService;
-        this.queries = queries;
+    }
+
+
+    public void setType(MavenArtifactInfo.Type type) {
+        this.type = type;
     }
 
     @Override
     public void run() {
-        deployableContainer.startFetching();
-        notifierService.startTask(this, "Fetching maven deployables ...", (long) 1);
+        deployableContainer.startFetching("Fetching maven repositories...");
         updateTree();
-        notifierService.stopTask(this);
         deployableContainer.stopFetching();
     }
 
     protected void updateTree() {
-        Graph<MavenNode> graph = mavenRepositoryService.list(queries);
-        for (Node<MavenNode> node : graph.getNodes()) {
-            buildNode(node, null, stopNode, false);
+        List<Node<MavenNode>> nodes = mavenRepositoryService.getChildren(uri, type);
+        if (nodes != null) {
+            for (Node<MavenNode> node : nodes) {
+                buildNode(node, parent);
+            }
         }
-    }
-
-    public void setStopNode(DeployableEntry stopNode) {
-        this.stopNode = stopNode;
     }
 }
