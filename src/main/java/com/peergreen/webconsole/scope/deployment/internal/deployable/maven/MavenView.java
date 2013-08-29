@@ -36,6 +36,8 @@ import org.apache.felix.ipojo.annotations.Unbind;
 @Deployable("maven")
 public class MavenView extends AbstractDeployableContainer {
 
+    private final static String CLEAR_FILTER = "Clear filters";
+
     @Inject
     private INotifierService notifierService;
     @Inject
@@ -98,12 +100,21 @@ public class MavenView extends AbstractDeployableContainer {
         final NativeSelect actionSelection = new NativeSelect();
         actionSelection.addItem(DeploymentActions.DEPLOY);
         actionSelection.addItem(DeploymentActions.DEPLOYMENT_PLAN);
+        actionSelection.addItem(CLEAR_FILTER);
         actionSelection.setWidth("100px");
         actionSelection.setNullSelectionAllowed(false);
 
         Button doButton = new Button("Do");
         doButton.addStyleName("default");
         doButton.addClickListener(new DoClickListener(artifactBuilder, tree, actionSelection, deploymentViewManager));
+        doButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                if (CLEAR_FILTER.equals(actionSelection.getValue())) {
+                    container.removeAllContainerFilters();
+                }
+            }
+        });
 
         actionArea.addComponent(actionSelection);
         actionArea.addComponent(doButton);
@@ -112,7 +123,15 @@ public class MavenView extends AbstractDeployableContainer {
         header.setComponentAlignment(actionArea, Alignment.TOP_RIGHT);
         addComponent(header);
 
-        addComponent(fetching);
+        HorizontalLayout repositoryInfo = new HorizontalLayout();
+        repositoryInfo.setWidth("100%");
+        repositoryInfo.addComponent(fetching);
+        repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
+        Button addNewRepo = new Button("Add maven repository");
+        addNewRepo.addStyleName("link");
+        repositoryInfo.addComponent(addNewRepo);
+        repositoryInfo.setComponentAlignment(addNewRepo, Alignment.MIDDLE_RIGHT);
+        addComponent(repositoryInfo);
 
         tree.addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
         addComponent(tree);

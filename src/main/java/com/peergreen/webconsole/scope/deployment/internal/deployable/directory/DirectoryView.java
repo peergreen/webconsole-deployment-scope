@@ -3,6 +3,7 @@ package com.peergreen.webconsole.scope.deployment.internal.deployable.directory;
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
+import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
@@ -17,6 +18,8 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListene
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
@@ -114,9 +117,19 @@ public class DirectoryView extends AbstractDeployableContainer {
         header.setComponentAlignment(actionArea, Alignment.TOP_RIGHT);
         addComponent(header);
 
-        addComponent(fetching);
+        HorizontalLayout repositoryInfo = new HorizontalLayout();
+        repositoryInfo.setWidth("100%");
+        repositoryInfo.addComponent(fetching);
+        repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
+        Button addNewRepo = new Button("Add directory");
+        addNewRepo.addStyleName("link");
+        repositoryInfo.addComponent(addNewRepo);
+        repositoryInfo.setComponentAlignment(addNewRepo, Alignment.MIDDLE_RIGHT);
+        addComponent(repositoryInfo);
 
         tree.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, tree, "Delete", ShortcutAction.KeyCode.DELETE, null));
+        tree.addExpandListener(new TreeItemExpandListener(this, directoryRepositoryService));
+
         addComponent(tree);
         setExpandRatio(tree, 1.5f);
     }
