@@ -13,6 +13,8 @@ import com.peergreen.webconsole.Unlink;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import com.vaadin.data.util.HierarchicalContainer;
+import com.vaadin.server.ClassResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.Panel;
@@ -47,7 +49,7 @@ public class DeployablePanel extends Panel implements DeployableContainer {
 
     private DeployableContainer directoryView;
     private DeployableContainer mavenView;
-    private DeployableContainer storeView;
+//    private DeployableContainer storeView;
     private List<DeployableContainer> containers = new CopyOnWriteArrayList<>();
     private TabSheet tabSheet = new TabSheet();
 
@@ -125,25 +127,31 @@ public class DeployablePanel extends Panel implements DeployableContainer {
         return this;
     }
 
-    @Link("all")
-    public void addAllView(DeployableContainer allPanel, Dictionary properties) {
-        tabSheet.addTab(allPanel.getView(), getDeployableCaption(properties), null, 0);
-        tabSheet.setSelectedTab(0);
-        containers.add(allPanel);
+    @Override
+    public HierarchicalContainer getContainer() {
+        return null;
     }
 
-    @Unlink("all")
-    public void removeAllView(DeployableContainer allPanel) {
-        if (containers.contains(allPanel)) {
-            tabSheet.removeComponent(allPanel.getView());
-        }
-    }
+//  FIXME how display deployables in this view?
+//    @Link("all")
+//    public void addAllView(DeployableContainer allPanel, Dictionary properties) {
+//        tabSheet.addTab(allPanel.getView(), getDeployableCaption(properties), null, 0);
+//        tabSheet.setSelectedTab(0);
+//        containers.add(allPanel);
+//    }
+//
+//    @Unlink("all")
+//    public void removeAllView(DeployableContainer allPanel) {
+//        if (containers.contains(allPanel)) {
+//            tabSheet.removeComponent(allPanel.getView());
+//        }
+//    }
 
     @Link("directory")
     public void addDirectoryView(DeployableContainer directoryView, Dictionary properties) {
         this.directoryView = directoryView;
         int position = (containers.size() >= 1) ? 1 : containers.size();
-        tabSheet.addTab(directoryView.getView(), getDeployableCaption(properties), null, position);
+        tabSheet.addTab(directoryView.getView(), getDeployableCaption(properties), new ClassResource(getClass(), "/images/22x22/directory.png"), position);
         containers.add(directoryView);
     }
 
@@ -159,7 +167,7 @@ public class DeployablePanel extends Panel implements DeployableContainer {
     public void addMavenView(DeployableContainer mavenView, Dictionary properties) {
         this.mavenView = mavenView;
         int position = (containers.size() >= 2) ? 2 : containers.size();
-        tabSheet.addTab(mavenView.getView(), getDeployableCaption(properties), null, position);
+        tabSheet.addTab(mavenView.getView(), getDeployableCaption(properties), new ClassResource(getClass(), "/images/22x22/maven.png"), position);
         containers.add(mavenView);
     }
 
@@ -171,21 +179,21 @@ public class DeployablePanel extends Panel implements DeployableContainer {
         }
     }
 
-    @Link("store")
-    public void addStoreView(DeployableContainer storeView, Dictionary properties) {
-        this.storeView = storeView;
-        int position = (containers.size() >= 3) ? 3 : containers.size();
-        tabSheet.addTab(storeView.getView(), getDeployableCaption(properties), null, position);
-        containers.add(storeView);
-    }
+//    @Link("store")
+//    public void addStoreView(DeployableContainer storeView, Dictionary properties) {
+//        this.m2View = storeView;
+//        int position = (containers.size() >= 3) ? 3 : containers.size();
+//        tabSheet.addTab(storeView.getView(), getDeployableCaption(properties), null, position);
+//        containers.add(storeView);
+//    }
 
-    @Unlink("store")
-    public void removeStoreView(DeployableContainer storeView) {
-        if (containers.contains(storeView)) {
-            this.storeView = null;
-            tabSheet.removeComponent(storeView.getView());
-        }
-    }
+//    @Unlink("store")
+//    public void removeStoreView(DeployableContainer storeView) {
+//        if (containers.contains(storeView)) {
+//            this.m2View = null;
+//            tabSheet.removeComponent(storeView.getView());
+//        }
+//    }
 
     private String getDeployableCaption(Dictionary properties) {
         String caption = (String) properties.get("deployable.value");
