@@ -59,7 +59,7 @@ public abstract class DeployableFetcher extends Thread {
             }
             deployableEntry.setDeployable(data.isLeaf());
         }
-        deployableContainer.addItemToContainer(deployableEntry, deployableContainer.getContainerProperties(deployableEntry));
+        deployableContainer.addItemToContainer(deployableEntry, deployableContainer.getContainerProperties(deployableEntry), false);
 
         return deployableEntry;
     }

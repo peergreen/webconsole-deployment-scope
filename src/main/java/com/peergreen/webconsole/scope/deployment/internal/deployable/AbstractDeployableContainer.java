@@ -126,7 +126,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
             }
 
             if (!(deployableEntry instanceof MavenDeployableEntry && deployableEntry.getParent() == null)) {
-                addItemToContainer(deployableEntry, getContainerProperties(deployableEntry));
+                addItemToContainer(deployableEntry, getContainerProperties(deployableEntry), true);
             }
         }
     }
@@ -197,7 +197,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         fetcher.start();
     }
 
-    public void addItemToContainer(final DeployableEntry deployableEntry, final Map<String, Object> properties) {
+    public void addItemToContainer(final DeployableEntry deployableEntry, final Map<String, Object> properties, final boolean expand) {
         uiContext.getUI().access(new Runnable() {
             @Override
             public void run() {
@@ -210,7 +210,9 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
                 }
                 if (deployableEntry.getParent() != null) {
                     container.setParent(deployableEntry, deployableEntry.getParent());
-                    tree.setCollapsed(deployableEntry.getParent(), false);
+                    if (expand) {
+                        tree.setCollapsed(deployableEntry.getParent(), false);
+                    }
                 }
                 container.setChildrenAllowed(deployableEntry, !deployableEntry.isDeployable());
             }
