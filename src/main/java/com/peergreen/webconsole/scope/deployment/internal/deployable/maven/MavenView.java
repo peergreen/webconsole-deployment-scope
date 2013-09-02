@@ -127,10 +127,6 @@ public class MavenView extends AbstractDeployableContainer {
         repositoryInfo.setWidth("100%");
         repositoryInfo.addComponent(fetching);
         repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
-        Button addNewRepo = new Button("Add maven repository");
-        addNewRepo.addStyleName("link");
-        repositoryInfo.addComponent(addNewRepo);
-        repositoryInfo.setComponentAlignment(addNewRepo, Alignment.MIDDLE_RIGHT);
         addComponent(repositoryInfo);
 
         tree.addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));

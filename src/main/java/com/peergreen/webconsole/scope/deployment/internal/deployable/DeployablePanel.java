@@ -15,8 +15,11 @@ import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.Deplo
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.server.ClassResource;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DragAndDropWrapper;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
@@ -49,8 +52,9 @@ public class DeployablePanel extends Panel implements DeployableContainer {
 
     private DeployableContainer directoryView;
     private DeployableContainer mavenView;
+    private Panel manager;
 //    private DeployableContainer storeView;
-    private List<DeployableContainer> containers = new CopyOnWriteArrayList<>();
+    private List<Component> containers = new CopyOnWriteArrayList<>();
     private TabSheet tabSheet = new TabSheet();
 
     @Ready
@@ -63,10 +67,27 @@ public class DeployablePanel extends Panel implements DeployableContainer {
         mainContent.setMargin(true);
         mainContent.setStyleName("deployable-style");
         mainContent.setSizeFull();
-        mainContent.setCaption("Deployed artifacts :");
+
+        HorizontalLayout header = new HorizontalLayout();
+        header.setWidth("100%");
+        Button openManager = new Button("Edit repositories");
+        openManager.addStyleName("link");
+        openManager.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                if (tabSheet.getTab(manager) == null) {
+                    tabSheet.addTab(manager, "Manager", new ClassResource(getClass(), "/images/22x22/configuration.png"), containers.size()).setClosable(true);
+                    tabSheet.setSelectedTab(manager);
+                }
+            }
+        });
+        header.addComponent(openManager);
+        header.setComponentAlignment(openManager, Alignment.MIDDLE_RIGHT);
+        mainContent.addComponent(header);
 
         tabSheet.setSizeFull();
         mainContent.addComponent(tabSheet);
+        mainContent.setExpandRatio(tabSheet, 1.5f);
 
         DragAndDropWrapper mainContentWrapper = new DragAndDropWrapper(mainContent);
         mainContentWrapper.setDropHandler(new DeploymentDropHandler(deploymentViewManager, this, notifierService));
@@ -150,14 +171,14 @@ public class DeployablePanel extends Panel implements DeployableContainer {
     @Link("directory")
     public void addDirectoryView(DeployableContainer directoryView, Dictionary properties) {
         this.directoryView = directoryView;
-        int position = (containers.size() >= 1) ? 1 : containers.size();
+        int position = 0;
         tabSheet.addTab(directoryView.getView(), getDeployableCaption(properties), new ClassResource(getClass(), "/images/22x22/directory.png"), position);
-        containers.add(directoryView);
+        containers.add(directoryView.getView());
     }
 
     @Unlink("directory")
     public void removeDirectoryView(DeployableContainer directoryView) {
-        if (containers.contains(directoryView)) {
+        if (containers.contains(directoryView.getView())) {
             this.directoryView = null;
             tabSheet.removeComponent(directoryView.getView());
         }
@@ -166,16 +187,29 @@ public class DeployablePanel extends Panel implements DeployableContainer {
     @Link("maven")
     public void addMavenView(DeployableContainer mavenView, Dictionary properties) {
         this.mavenView = mavenView;
-        int position = (containers.size() >= 2) ? 2 : containers.size();
+        int position = (containers.size() >= 1) ? 1 : containers.size();
         tabSheet.addTab(mavenView.getView(), getDeployableCaption(properties), new ClassResource(getClass(), "/images/22x22/maven.png"), position);
-        containers.add(mavenView);
+        containers.add(mavenView.getView());
     }
 
     @Unlink("maven")
     public void removeMavenView(DeployableContainer mavenView) {
-        if (containers.contains(mavenView)) {
+        if (containers.contains(mavenView.getView())) {
             this.mavenView = null;
             tabSheet.removeComponent(mavenView.getView());
+        }
+    }
+
+    @Link("manager")
+    public void addRepositoryManagerView(Panel repositoryManagerView, Dictionary properties) {
+        this.manager = repositoryManagerView;
+    }
+
+    @Unlink("manager")
+    public void removeRepositoryManagerView(Panel repositoryManagerView) {
+        if (containers.contains(repositoryManagerView)) {
+            manager = null;
+            tabSheet.removeComponent(repositoryManagerView);
         }
     }
 

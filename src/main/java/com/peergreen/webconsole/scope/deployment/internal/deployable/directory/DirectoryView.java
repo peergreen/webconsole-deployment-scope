@@ -121,10 +121,6 @@ public class DirectoryView extends AbstractDeployableContainer {
         repositoryInfo.setWidth("100%");
         repositoryInfo.addComponent(fetching);
         repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
-        Button addNewRepo = new Button("Add directory");
-        addNewRepo.addStyleName("link");
-        repositoryInfo.addComponent(addNewRepo);
-        repositoryInfo.setComponentAlignment(addNewRepo, Alignment.MIDDLE_RIGHT);
         addComponent(repositoryInfo);
 
         tree.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, tree, "Delete", ShortcutAction.KeyCode.DELETE, null));
