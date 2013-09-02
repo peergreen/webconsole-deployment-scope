@@ -111,7 +111,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
             deployableEntry.setContainer(this);
 
             String url = deployableEntry.getUri().toString();
-            String parentUrl = url.substring(0, url.lastIndexOf(File.separator));
+            String parentUrl = url.substring(0, url.lastIndexOf(File.separator) + 1);
 
             if (deployableEntry.getParent() == null) {
                 try {

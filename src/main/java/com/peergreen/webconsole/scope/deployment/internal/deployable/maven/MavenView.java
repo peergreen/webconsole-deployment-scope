@@ -71,7 +71,7 @@ public class MavenView extends AbstractDeployableContainer {
     public void init() {
         super.init(uiContext, artifactModelManager);
 
-        repositoryManager.addRepository("https://forge.peergreen.com/repository/content/repositories/releases", "Peergreen Releases", RepositoryType.MAVEN);
+        repositoryManager.addRepository("https://forge.peergreen.com/repository/content/repositories/releases/", "Peergreen Releases", RepositoryType.MAVEN);
 
         HorizontalLayout header = new HorizontalLayout();
         header.setWidth("100%");
