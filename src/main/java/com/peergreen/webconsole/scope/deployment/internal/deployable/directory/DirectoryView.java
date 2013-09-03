@@ -78,11 +78,18 @@ public class DirectoryView extends AbstractDeployableContainer {
     public void init() {
         super.init(uiContext, artifactModelManager);
 
-        repositoryManager.addRepository(new File(Constants.STORAGE_DIRECTORY).toURI().toString(), "Temporary directory", RepositoryType.DIRECTORY);
-        repositoryManager.addRepository(new File(System.getProperty("user.dir") + File.separator + "deploy").toURI().toString(), "Deploy", RepositoryType.DIRECTORY);
+        File deploy = new File(System.getProperty("user.dir") + File.separator + "deploy");
+        repositoryManager.addRepository(formatUrl(deploy), "Deploy", RepositoryType.DIRECTORY);
+
+        File tmp = new File(Constants.STORAGE_DIRECTORY);
+        if (!tmp.exists()) {
+            tmp.mkdirs();
+        }
+        repositoryManager.addRepository(formatUrl(tmp), "Temporary directory", RepositoryType.DIRECTORY);
+
         File m2 = new File(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository");
         if (m2.exists()) {
-            repositoryManager.addRepository(m2.toURI().toString(), "Local M2 repository", RepositoryType.DIRECTORY);
+            repositoryManager.addRepository(formatUrl(m2), "Local M2 repository", RepositoryType.DIRECTORY);
         }
 
         HorizontalLayout header = new HorizontalLayout();
@@ -137,5 +144,13 @@ public class DirectoryView extends AbstractDeployableContainer {
                 updateTree(directoryRepositoryService);
             }
         });
+    }
+
+    private String formatUrl(File file) {
+        String url = file.toURI().toString();
+        if (url.charAt(url.length() - 1) != '/') {
+            url += '/';
+        }
+        return url;
     }
 }
