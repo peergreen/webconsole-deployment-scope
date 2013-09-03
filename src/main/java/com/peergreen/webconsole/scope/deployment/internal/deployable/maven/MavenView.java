@@ -24,9 +24,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
-import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.Unbind;
 
 /**
  * @author Mohammed Boukada
@@ -55,16 +53,6 @@ public class MavenView extends AbstractDeployableContainer {
 
     protected MavenView() {
         super(DeployableSource.MAVEN);
-    }
-
-    @Bind(aggregate = true, optional = true, filter = "(!(repository.type=" + RepositoryType.FACADE +"))")
-    public void bindMavenRepositoryService(MavenRepositoryService mavenRepositoryService) {
-        updateTree();
-    }
-
-    @Unbind
-    public void unbindMavenRepositoryService(MavenRepositoryService mavenRepositoryService) {
-        updateTree();
     }
 
     @Ready

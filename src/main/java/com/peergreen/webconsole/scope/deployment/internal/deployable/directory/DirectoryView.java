@@ -27,9 +27,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
-import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.Unbind;
 import org.osgi.framework.BundleContext;
 
 import java.io.File;
@@ -62,16 +60,6 @@ public class DirectoryView extends AbstractDeployableContainer {
 
     protected DirectoryView() {
         super(DeployableSource.FILE);
-    }
-
-    @Bind(aggregate = true, optional = true, filter = "(!(repository.type=" + RepositoryType.FACADE +"))")
-    public void bindDirectoryRepositoryService(DirectoryRepositoryService directoryRepositoryService) {
-        updateTree();
-    }
-
-    @Unbind
-    public void unbindDirectoryRepositoryService(DirectoryRepositoryService directoryRepositoryService) {
-        updateTree();
     }
 
     @Ready
