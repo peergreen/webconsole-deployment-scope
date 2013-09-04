@@ -16,6 +16,8 @@ import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Upload;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,13 +25,19 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
-import static com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType.*;
+import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYED;
+import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYMENT_PLAN;
 
 
 /**
  * @author Mohammed Boukada
  */
 public class FileUploader implements Upload.Receiver, Upload.SucceededListener, Upload.FailedListener, Upload.StartedListener, Upload.ProgressListener {
+
+    /**
+     * Logger.
+     */
+    private static final Log LOGGER = LogFactory.getLog(FileUploader.class);
 
     private DeploymentViewManager deploymentViewService;
     private INotifierService notifierService;
@@ -55,7 +63,7 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
             }
             return new FileOutputStream(fileLocation, true);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return null;
     }

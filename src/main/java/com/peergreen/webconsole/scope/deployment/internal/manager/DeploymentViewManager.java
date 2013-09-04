@@ -1,7 +1,7 @@
 package com.peergreen.webconsole.scope.deployment.internal.manager;
 
 import com.peergreen.deployment.Artifact;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 
 import java.net.URI;
 import java.util.List;

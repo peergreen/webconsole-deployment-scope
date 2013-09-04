@@ -1,7 +1,6 @@
 package com.peergreen.webconsole.scope.deployment.internal.deploymentplan;
 
 import com.peergreen.deployment.ArtifactBuilder;
-import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
@@ -9,12 +8,12 @@ import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TableItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
 import com.vaadin.data.Item;
@@ -57,12 +56,10 @@ import java.util.List;
 @ExtensionPoint("com.peergreen.webconsole.scope.deployment.internal.DeploymentScope.deployment.plan")
 public class DeploymentPlanPanel extends Panel implements DeployableContainer {
 
-    private final static String TREE_ITEM_ID = "Deployable";
-    private final static String DEFAULT_DP_NAME_PREFIX = "deployment-plan-";
-    public final static String XML_EXTENSION = ".xml";
+    private static final String TREE_ITEM_ID = "Deployable";
+    private static final String DEFAULT_DP_NAME_PREFIX = "deployment-plan-";
+    public static final String XML_EXTENSION = ".xml";
 
-    @Inject
-    private ArtifactModelManager artifactModelManager;
     @Inject
     private ArtifactBuilder artifactBuilder;
     @Inject

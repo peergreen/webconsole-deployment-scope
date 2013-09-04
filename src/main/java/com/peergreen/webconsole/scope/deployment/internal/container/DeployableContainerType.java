@@ -1,4 +1,4 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable;
+package com.peergreen.webconsole.scope.deployment.internal.container;
 
 /**
  * @author Mohammed Boukada

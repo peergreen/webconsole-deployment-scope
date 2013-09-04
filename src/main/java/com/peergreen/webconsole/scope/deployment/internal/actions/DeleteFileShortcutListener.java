@@ -1,6 +1,6 @@
 package com.peergreen.webconsole.scope.deployment.internal.actions;
 
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.Table;

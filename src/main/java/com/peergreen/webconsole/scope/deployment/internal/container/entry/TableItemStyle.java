@@ -1,6 +1,6 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable.entry;
+package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.vaadin.ui.Table;
 
 /**

@@ -21,7 +21,7 @@ import java.util.Collection;
 public class WebConsoleDeploymentService implements DeploymentManager {
 
     @Requires
-    DeploymentService deploymentService;
+    private DeploymentService deploymentService;
 
     @Override
     public DeploymentStatusReport process(Collection<ArtifactProcessRequest> artifactProcessRequests) {

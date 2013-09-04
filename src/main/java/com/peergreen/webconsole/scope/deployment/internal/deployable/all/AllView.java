@@ -1,38 +1,30 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.all;
 
 import com.peergreen.deployment.ArtifactBuilder;
-import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Ready;
-import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
-import com.vaadin.ui.VerticalLayout;
 import org.apache.felix.ipojo.annotations.Requires;
 
-import java.net.URI;
 import java.util.Collections;
 
 /**
@@ -47,13 +39,7 @@ public class AllView extends AbstractDeployableContainer {
     public final static String MAVEN_ITEM_ID = "Maven";
 
     @Inject
-    private INotifierService notifierService;
-    @Inject
-    private UIContext uiContext;
-    @Inject
     private ArtifactBuilder artifactBuilder;
-    @Inject
-    private ArtifactModelManager artifactModelManager;
     @Inject
     private DeploymentViewManager deploymentViewManager;
 

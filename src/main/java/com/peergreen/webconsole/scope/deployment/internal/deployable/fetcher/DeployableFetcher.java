@@ -4,10 +4,10 @@ import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.BaseNode;
 import com.peergreen.deployment.repository.Node;
 import com.peergreen.deployment.repository.maven.MavenNode;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.vaadin.data.util.HierarchicalContainer;
 
 import java.net.URI;
@@ -17,11 +17,11 @@ import java.net.URI;
  */
 public abstract class DeployableFetcher extends Thread {
 
-    protected AbstractDeployableContainer deployableContainer;
-    protected HierarchicalContainer container;
-    protected ArtifactModelManager artifactModelManager;
-    protected DeployableEntry parent;
-    protected URI uri;
+    private ArtifactModelManager artifactModelManager;
+    private AbstractDeployableContainer deployableContainer;
+    private HierarchicalContainer container;
+    private DeployableEntry parent;
+    private URI uri;
 
     protected DeployableFetcher(AbstractDeployableContainer deployableContainer,
                                 HierarchicalContainer container,
@@ -70,5 +70,17 @@ public abstract class DeployableFetcher extends Thread {
 
     public void setUri(URI uri) {
         this.uri = uri;
+    }
+
+    public AbstractDeployableContainer getDeployableContainer() {
+        return deployableContainer;
+    }
+
+    public DeployableEntry getParent() {
+        return parent;
+    }
+
+    public URI getUri() {
+        return uri;
     }
 }

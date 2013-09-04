@@ -1,9 +1,9 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable.entry;
+package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.DirectoryDeployableFetcher;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.MavenDeployableFetcher;
 import com.vaadin.ui.Tree;

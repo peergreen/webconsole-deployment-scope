@@ -4,10 +4,10 @@ import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.service.Deployer;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -145,13 +145,11 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
             ConfirmDialog.show(framesContainer.getUI(), new Label(message, ContentMode.HTML), new ConfirmDialog.Listener() {
                 @Override
                 public void onClose(boolean isConfirmed) {
-                    if (isConfirmed) {
-                        if (file.delete()) {
-                            if (deployableEntry.getContainer() != null) {
-                                deployableEntry.getContainer().removeDeployable(deployableEntry);
-                            }
-                            notifierService.addNotification(String.format("'%s' was deleted.", file.getName()));
+                    if (isConfirmed && file.delete()) {
+                        if (deployableEntry.getContainer() != null) {
+                            deployableEntry.getContainer().removeDeployable(deployableEntry);
                         }
+                        notifierService.addNotification(String.format("'%s' was deleted.", file.getName()));
                     }
                 }
             });

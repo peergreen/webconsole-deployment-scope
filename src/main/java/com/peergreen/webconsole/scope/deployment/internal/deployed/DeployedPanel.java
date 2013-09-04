@@ -14,11 +14,11 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListene
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.actions.SelectAll;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TableItemStyle;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -45,7 +45,7 @@ import java.util.List;
 @ExtensionPoint("com.peergreen.webconsole.scope.deployment.internal.DeploymentScope.deployed")
 public class DeployedPanel extends Panel implements DeployableContainer {
 
-    public final static String TREE_ITEM_ID = "Deployed";
+    public static final String TREE_ITEM_ID = "Deployed";
 
     @Inject
     private ArtifactModelManager artifactModelManager;

@@ -4,7 +4,7 @@ import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.Node;
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.deployment.repository.maven.MavenNode;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
 
 import java.util.List;
 
@@ -29,16 +29,16 @@ public class MavenDeployableFetcher extends DeployableFetcher {
 
     @Override
     public void run() {
-        deployableContainer.startFetching("Fetching maven repositories...");
+        getDeployableContainer().startFetching("Fetching maven repositories...");
         updateTree();
-        deployableContainer.stopFetching();
+        getDeployableContainer().stopFetching();
     }
 
     protected void updateTree() {
-        List<Node<MavenNode>> nodes = mavenRepositoryService.getChildren(uri, type);
+        List<Node<MavenNode>> nodes = mavenRepositoryService.getChildren(getUri(), type);
         if (nodes != null) {
             for (Node<MavenNode> node : nodes) {
-                buildNode(node, parent);
+                buildNode(node, getParent());
             }
         }
     }

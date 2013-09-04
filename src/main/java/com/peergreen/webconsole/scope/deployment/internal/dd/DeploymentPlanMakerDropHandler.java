@@ -1,7 +1,7 @@
 package com.peergreen.webconsole.scope.deployment.internal.dd;
 
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;

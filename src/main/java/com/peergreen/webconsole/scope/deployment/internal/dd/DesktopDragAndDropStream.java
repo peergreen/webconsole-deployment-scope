@@ -2,7 +2,7 @@ package com.peergreen.webconsole.scope.deployment.internal.dd;
 
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.vaadin.server.StreamVariable;
 
 import java.io.File;

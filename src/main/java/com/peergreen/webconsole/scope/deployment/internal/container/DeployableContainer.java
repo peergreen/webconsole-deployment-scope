@@ -1,6 +1,6 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable;
+package com.peergreen.webconsole.scope.deployment.internal.container;
 
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.ui.Component;
 

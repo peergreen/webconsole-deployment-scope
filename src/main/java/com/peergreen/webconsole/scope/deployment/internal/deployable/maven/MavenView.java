@@ -7,17 +7,16 @@ import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -34,10 +33,8 @@ import org.apache.felix.ipojo.annotations.Requires;
 @Deployable("maven")
 public class MavenView extends AbstractDeployableContainer {
 
-    private final static String CLEAR_FILTER = "Clear filters";
+    private static final String CLEAR_FILTER = "Clear filters";
 
-    @Inject
-    private INotifierService notifierService;
     @Inject
     private UIContext uiContext;
     @Inject
@@ -68,19 +65,19 @@ public class MavenView extends AbstractDeployableContainer {
 
         final TextField filterG = new TextField();
         filterG.setInputPrompt("Filter by group id");
-        filterG.addTextChangeListener(new FilterFiles(MVN_GROUP_ID, container));
+        filterG.addTextChangeListener(new FilterFiles(MVN_GROUP_ID, getContainer()));
         header.addComponent(filterG);
         header.setComponentAlignment(filterG, Alignment.TOP_LEFT);
 
         final TextField filterA = new TextField();
         filterA.setInputPrompt("Filter by artifact id");
-        filterA.addTextChangeListener(new FilterFiles(MVN_ARTIFACT_ID, container));
+        filterA.addTextChangeListener(new FilterFiles(MVN_ARTIFACT_ID, getContainer()));
         header.addComponent(filterA);
         header.setComponentAlignment(filterA, Alignment.TOP_LEFT);
 
         final TextField filterV = new TextField();
         filterV.setInputPrompt("Filter by version");
-        filterV.addTextChangeListener(new FilterFiles(MVN_VERSION, container));
+        filterV.addTextChangeListener(new FilterFiles(MVN_VERSION, getContainer()));
         header.addComponent(filterV);
         header.setComponentAlignment(filterV, Alignment.TOP_LEFT);
 
@@ -94,12 +91,12 @@ public class MavenView extends AbstractDeployableContainer {
 
         Button doButton = new Button("Do");
         doButton.addStyleName("default");
-        doButton.addClickListener(new DoClickListener(artifactBuilder, tree, actionSelection, deploymentViewManager));
+        doButton.addClickListener(new DoClickListener(artifactBuilder, getTree(), actionSelection, deploymentViewManager));
         doButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (CLEAR_FILTER.equals(actionSelection.getValue())) {
-                    container.removeAllContainerFilters();
+                    getContainer().removeAllContainerFilters();
                 }
             }
         });
@@ -113,13 +110,13 @@ public class MavenView extends AbstractDeployableContainer {
 
         HorizontalLayout repositoryInfo = new HorizontalLayout();
         repositoryInfo.setWidth("100%");
-        repositoryInfo.addComponent(fetching);
-        repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
+        repositoryInfo.addComponent(getFetching());
+        repositoryInfo.setComponentAlignment(getFetching(), Alignment.MIDDLE_LEFT);
         addComponent(repositoryInfo);
 
-        tree.addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
-        addComponent(tree);
-        setExpandRatio(tree, 1.5f);
+        getTree().addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
+        addComponent(getTree());
+        setExpandRatio(getTree(), 1.5f);
 
         updateTree();
     }

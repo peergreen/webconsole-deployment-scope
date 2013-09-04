@@ -12,11 +12,10 @@ import com.peergreen.webconsole.Scope;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.Unlink;
 import com.peergreen.webconsole.scope.deployment.internal.components.FileUploader;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentPlanMakerDropHandler;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.manager.BaseDeploymentViewManager;
-import com.peergreen.webconsole.scope.deployment.internal.service.Deployer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
@@ -42,11 +41,9 @@ import java.util.Hashtable;
 public class DeploymentScope extends VerticalLayout {
 
     @Inject
-    ArtifactBuilder artifactBuilder;
+    private ArtifactBuilder artifactBuilder;
     @Inject
     private INotifierService notifierService;
-    @Inject
-    private Deployer deployer;
     @Inject
     private UIContext uiContext;
     @Requires(from = "com.peergreen.webconsole.scope.deployment.internal.manager.BaseDeploymentViewManager")

@@ -8,10 +8,10 @@ import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
 import com.peergreen.webconsole.Ready;
-import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.Unlink;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.server.ClassResource;
@@ -23,7 +23,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
-import org.osgi.service.cm.ConfigurationAdmin;
 
 import java.net.URI;
 import java.util.Dictionary;
@@ -38,15 +37,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class DeployablePanel extends Panel implements DeployableContainer {
 
     @Inject
-    ArtifactBuilder artifactBuilder;
+    private ArtifactBuilder artifactBuilder;
     @Inject
     private ArtifactModelManager artifactModelManager;
     @Inject
-    private ConfigurationAdmin configurationAdmin;
-    @Inject
     private INotifierService notifierService;
-    @Inject
-    private UIContext uiContext;
     @Inject
     private DeploymentViewManager deploymentViewManager;
 

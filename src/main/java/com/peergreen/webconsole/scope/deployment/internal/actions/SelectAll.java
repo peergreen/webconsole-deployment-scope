@@ -1,6 +1,6 @@
 package com.peergreen.webconsole.scope.deployment.internal.actions;
 
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractSelect;
 

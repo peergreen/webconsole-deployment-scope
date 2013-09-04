@@ -1,7 +1,7 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable.entry;
+package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 
 import java.net.URI;
 

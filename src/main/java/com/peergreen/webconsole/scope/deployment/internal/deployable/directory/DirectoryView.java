@@ -8,7 +8,6 @@ import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
@@ -16,10 +15,10 @@ import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
@@ -28,7 +27,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import org.apache.felix.ipojo.annotations.Requires;
-import org.osgi.framework.BundleContext;
 
 import java.io.File;
 
@@ -44,9 +42,6 @@ public class DirectoryView extends AbstractDeployableContainer {
     private DirectoryRepositoryService directoryRepositoryService;
     @Inject
     private RepositoryManager repositoryManager;
-
-    @Inject
-    private INotifierService notifierService;
     @Inject
     private ArtifactBuilder artifactBuilder;
     @Inject
@@ -55,8 +50,6 @@ public class DirectoryView extends AbstractDeployableContainer {
     private UIContext uiContext;
     @Inject
     private DeploymentViewManager deploymentViewManager;
-    @Inject
-    BundleContext bundleContext;
 
     protected DirectoryView() {
         super(DeployableSource.FILE);
@@ -88,7 +81,7 @@ public class DirectoryView extends AbstractDeployableContainer {
         final TextField filter = new TextField();
         filter.setInputPrompt("Filter deployable files");
         filter.setWidth("100%");
-        filter.addTextChangeListener(new FilterFiles(DEPLOYABLE_NAME, container));
+        filter.addTextChangeListener(new FilterFiles(DEPLOYABLE_NAME, getContainer()));
         header.addComponent(filter);
         header.setComponentAlignment(filter, Alignment.TOP_LEFT);
         header.setExpandRatio(filter, 3);
@@ -103,7 +96,7 @@ public class DirectoryView extends AbstractDeployableContainer {
 
         Button doButton = new Button("Do");
         doButton.addStyleName("default");
-        doButton.addClickListener(new DoClickListener(artifactBuilder, tree, actionSelection, deploymentViewManager));
+        doButton.addClickListener(new DoClickListener(artifactBuilder, getTree(), actionSelection, deploymentViewManager));
 
         actionArea.addComponent(actionSelection);
         actionArea.addComponent(doButton);
@@ -114,15 +107,15 @@ public class DirectoryView extends AbstractDeployableContainer {
 
         HorizontalLayout repositoryInfo = new HorizontalLayout();
         repositoryInfo.setWidth("100%");
-        repositoryInfo.addComponent(fetching);
-        repositoryInfo.setComponentAlignment(fetching, Alignment.MIDDLE_LEFT);
+        repositoryInfo.addComponent(getFetching());
+        repositoryInfo.setComponentAlignment(getFetching(), Alignment.MIDDLE_LEFT);
         addComponent(repositoryInfo);
 
-        tree.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, tree, "Delete", ShortcutAction.KeyCode.DELETE, null));
-        tree.addExpandListener(new TreeItemExpandListener(this, directoryRepositoryService));
+        getTree().addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, getTree(), "Delete", ShortcutAction.KeyCode.DELETE, null));
+        getTree().addExpandListener(new TreeItemExpandListener(this, directoryRepositoryService));
 
-        addComponent(tree);
-        setExpandRatio(tree, 1.5f);
+        addComponent(getTree());
+        setExpandRatio(getTree(), 1.5f);
     }
 
     protected void updateTree() {

@@ -12,8 +12,8 @@ package com.peergreen.webconsole.scope.deployment.internal.dd;
 
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
 import com.vaadin.event.DataBoundTransferable;
@@ -53,7 +53,7 @@ public class DeploymentDropHandler implements DropHandler {
     public void drop(DragAndDropEvent event) {
         final Component component = event.getTransferable().getSourceComponent();
         Collection<DeployableEntry> draggedDeployableEntries;
-        if (component != null && component instanceof Table) {
+        if (component instanceof Table) {
             Table table = (Table) component;
             draggedDeployableEntries = (Collection<DeployableEntry>) table.getValue();
 

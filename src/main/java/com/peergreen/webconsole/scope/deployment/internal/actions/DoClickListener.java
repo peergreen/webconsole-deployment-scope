@@ -3,7 +3,7 @@ package com.peergreen.webconsole.scope.deployment.internal.actions;
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.NativeSelect;

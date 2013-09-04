@@ -22,10 +22,10 @@ import java.util.Collections;
 @Provides
 public class BaseDeployer implements Deployer {
 
-    private final static String DEPLOYED_STATE = "deployed";
-    private final static String UNDEPLOYED_STATE = "undeployed";
-    private final static String UPDATE_STATE = "updated";
-    private final static String FAILED_STATE = "failed";
+    private static final String DEPLOYED_STATE = "deployed";
+    private static final String UNDEPLOYED_STATE = "undeployed";
+    private static final String UPDATE_STATE = "updated";
+    private static final String FAILED_STATE = "failed";
 
     @Requires
     private ArtifactBuilder artifactBuilder;

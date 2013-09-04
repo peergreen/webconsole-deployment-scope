@@ -1,13 +1,13 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable;
+package com.peergreen.webconsole.scope.deployment.internal.container;
 
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.webconsole.UIContext;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.MavenDeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.entry.TreeItemClickListener;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.DirectoryDeployableFetcher;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.MavenDeployableFetcher;
 import com.vaadin.data.Item;
@@ -34,21 +34,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Mohammed Boukada
  */
 public abstract class AbstractDeployableContainer extends VerticalLayout implements DeployableContainer {
-    public final static String DEPLOYABLE_NAME = "Deployables";
-    public final static String MVN_GROUP_ID = "g";
-    public final static String MVN_ARTIFACT_ID = "a";
-    public final static String MVN_VERSION = "v";
-    public final static String ICON = "icon";
+    public static final String DEPLOYABLE_NAME = "Deployables";
+    public static final String MVN_GROUP_ID = "g";
+    public static final String MVN_ARTIFACT_ID = "a";
+    public static final String MVN_VERSION = "v";
+    public static final String ICON = "icon";
 
-    public final static String XML_EXTENSION = ".xml";
-    public final static String JAR_EXTENSION = ".jar";
-    public final static String WAR_EXTENSION = ".war";
+    public static final String XML_EXTENSION = ".xml";
+    public static final String JAR_EXTENSION = ".jar";
+    public static final String WAR_EXTENSION = ".war";
 
     private DeployableSource deployableSource;
 
-    protected TreeTable tree = new TreeTable();
-    protected HierarchicalContainer container = new HierarchicalContainer();
-    protected Label fetching = new Label("");
+    private TreeTable tree = new TreeTable();
+    private HierarchicalContainer container = new HierarchicalContainer();
+    private Label fetching = new Label("");
 
     private UIContext uiContext;
     private ArtifactModelManager artifactModelManager;
@@ -166,6 +166,14 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         return container;
     }
 
+    public TreeTable getTree() {
+        return tree;
+    }
+
+    public Label getFetching() {
+        return fetching;
+    }
+
     protected Resource getResource(DeployableEntry deployableEntry) {
         if (!deployableEntry.isDeployable()) {
             return new ClassResource(getClass(), "/images/16x16/directory-icon.png");
@@ -263,3 +271,4 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         updateTree();
     }
 }
+

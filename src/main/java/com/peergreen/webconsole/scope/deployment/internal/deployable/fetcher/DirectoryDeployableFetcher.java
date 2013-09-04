@@ -3,7 +3,7 @@ package com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher;
 import com.peergreen.deployment.repository.BaseNode;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.Node;
-import com.peergreen.webconsole.scope.deployment.internal.deployable.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ public class DirectoryDeployableFetcher extends DeployableFetcher {
 
     @Override
     public void run() {
-        deployableContainer.startFetching("Fetching directories...");
+        getDeployableContainer().startFetching("Fetching directories...");
         updateTree();
-        deployableContainer.stopFetching();
+        getDeployableContainer().stopFetching();
     }
 
     protected void updateTree() {
-        List<Node<BaseNode>> nodes = directoryRepositoryService.getChildren(uri);
+        List<Node<BaseNode>> nodes = directoryRepositoryService.getChildren(getUri());
         if (nodes != null) {
             for (Node<BaseNode> node : nodes) {
-                buildNode(node, parent);
+                buildNode(node, getParent());
             }
         }
     }

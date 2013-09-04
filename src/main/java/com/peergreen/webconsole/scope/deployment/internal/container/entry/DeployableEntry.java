@@ -1,6 +1,6 @@
-package com.peergreen.webconsole.scope.deployment.internal.deployable.entry;
+package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
-import com.peergreen.webconsole.scope.deployment.internal.deployable.DeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 
 import java.io.File;
 import java.net.URI;
@@ -27,12 +27,13 @@ public class DeployableEntry {
         this.uri = uri;
         if (name == null || "".equals(name)) {
             try {
-                name = new File(uri).getName();
+                this.name = new File(uri).getName();
             } catch (IllegalArgumentException e) {
-                name = uri.toString();
+                this.name = uri.toString();
             }
+        } else {
+            this.name = name;
         }
-        this.name = name;
         this.source = source;
         this.container = container;
         setParent(parent);
