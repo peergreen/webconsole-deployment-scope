@@ -35,8 +35,8 @@ import java.util.Collections;
 @Deployable("quick search")
 public class AllView extends AbstractDeployableContainer {
 
-    public final static String DIRECTORY_ITEM_ID = "Files";
-    public final static String MAVEN_ITEM_ID = "Maven";
+    public static final String DIRECTORY_ITEM_ID = "Files";
+    public static final String MAVEN_ITEM_ID = "Maven";
 
     @Inject
     private ArtifactBuilder artifactBuilder;

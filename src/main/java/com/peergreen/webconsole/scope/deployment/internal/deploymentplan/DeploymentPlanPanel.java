@@ -67,7 +67,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
     @Inject
     private DeploymentViewManager deploymentViewManager;
     @Inject
-    UIContext uiContext;
+    private UIContext uiContext;
 
     private HierarchicalContainer container = new HierarchicalContainer();
     private Label error;
