@@ -54,6 +54,8 @@ public class DeploymentScope extends VerticalLayout {
     private BaseDeploymentViewManager deploymentViewManager;
     private HorizontalLayout framesContainer;
 
+    private HelpOverlay helpWindow;
+
     public DeploymentScope() {
         setSizeFull();
         addStyleName("deployment-view");
@@ -111,6 +113,12 @@ public class DeploymentScope extends VerticalLayout {
 
         addComponent(framesContainer);
         setExpandRatio(framesContainer, 1.5f);
+
+        helpWindow = notifierService.createHelpOverlay(
+                "Deployment module",
+                "<p>To deploy, or undeploy, artifacts, you can drag and drop elements from deployables panel " +
+                        "to deployed panel and vice versa.</p>" +
+                        "<p>You can also drag files from desktop and drop them where you want to add them.");
     }
 
     private BaseDeploymentViewManager createDeploymentViewManager() {
@@ -161,5 +169,21 @@ public class DeploymentScope extends VerticalLayout {
         framesContainer.removeComponent(deploymentPlanPanel.getView());
         deploymentViewManager.setDeploymentPlanContainer(null);
         deploymentPlanMakerWrapper.setDropHandler(null);
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        if (helpWindow != null && !helpWindow.isSeen() && !helpWindow.isAttached()) {
+            getUI().addWindow(helpWindow);
+        }
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        if (helpWindow != null && helpWindow.isAttached()) {
+            getUI().removeWindow(helpWindow);
+        }
     }
 }
