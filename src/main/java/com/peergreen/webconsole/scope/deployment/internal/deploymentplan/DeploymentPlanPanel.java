@@ -6,7 +6,6 @@ import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
@@ -41,6 +40,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -74,7 +74,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
     private CheckBox deployIt;
     private TextField deploymentPlanName;
 
-    @Ready
+    @PostConstruct
     public void init() {
         setSizeFull();
 

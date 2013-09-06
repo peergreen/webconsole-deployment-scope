@@ -6,7 +6,6 @@ import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.vaadin.DefaultWindow;
@@ -24,6 +23,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -44,7 +44,7 @@ public class RepositoryManagerPanel extends Panel {
     @Inject
     private UIContext uiContext;
 
-    @Ready
+    @PostConstruct
     public void init() {
         setSizeFull();
         VerticalLayout mainLayout = new VerticalLayout();

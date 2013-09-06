@@ -9,7 +9,6 @@ import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
@@ -28,6 +27,7 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import org.apache.felix.ipojo.annotations.Requires;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 
 /**
@@ -55,7 +55,7 @@ public class DirectoryView extends AbstractDeployableContainer {
         super(DeployableSource.FILE);
     }
 
-    @Ready
+    @PostConstruct
     public void init() {
         super.init(uiContext, artifactModelManager);
 

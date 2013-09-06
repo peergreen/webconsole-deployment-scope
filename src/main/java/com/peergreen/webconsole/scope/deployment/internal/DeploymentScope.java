@@ -4,10 +4,10 @@ import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
+import com.peergreen.webconsole.HelpOverlay;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.Scope;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.Unlink;
@@ -29,6 +29,7 @@ import org.apache.felix.ipojo.MissingHandlerException;
 import org.apache.felix.ipojo.UnacceptableConfiguration;
 import org.apache.felix.ipojo.annotations.Requires;
 
+import javax.annotation.PostConstruct;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -64,9 +65,8 @@ public class DeploymentScope extends VerticalLayout {
         framesContainer.addStyleName("row");
     }
 
-    @Ready
+    @PostConstruct
     public void init() {
-
         deploymentViewManager = createDeploymentViewManager();
 
         OptionGroup option = new OptionGroup();

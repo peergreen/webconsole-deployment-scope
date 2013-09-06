@@ -7,11 +7,10 @@ import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.Unlink;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.server.ClassResource;
@@ -24,6 +23,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
+import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.Dictionary;
 import java.util.List;
@@ -52,7 +52,7 @@ public class DeployablePanel extends Panel implements DeployableContainer {
     private List<Component> containers = new CopyOnWriteArrayList<>();
     private TabSheet tabSheet = new TabSheet();
 
-    @Ready
+    @PostConstruct
     public void init() {
 
         setSizeFull();

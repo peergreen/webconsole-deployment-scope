@@ -8,7 +8,6 @@ import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
@@ -24,6 +23,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import org.apache.felix.ipojo.annotations.Requires;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Mohammed Boukada
@@ -52,7 +53,7 @@ public class MavenView extends AbstractDeployableContainer {
         super(DeployableSource.MAVEN);
     }
 
-    @Ready
+    @PostConstruct
     public void init() {
         super.init(uiContext, artifactModelManager);
 

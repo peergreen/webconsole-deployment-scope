@@ -6,19 +6,18 @@ import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.actions.SelectAll;
-import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
+import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -35,6 +34,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
     private DeploymentViewManager deploymentViewManager;
     private HierarchicalContainer container = new HierarchicalContainer();
 
-    @Ready
+    @PostConstruct
     public void init() {
         setSizeFull();
         Table table = new Table();

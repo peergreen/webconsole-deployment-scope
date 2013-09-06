@@ -6,7 +6,6 @@ import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.Ready;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
@@ -25,6 +24,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
 import org.apache.felix.ipojo.annotations.Requires;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
@@ -55,7 +55,7 @@ public class AllView extends AbstractDeployableContainer {
         super(null);
     }
 
-    @Ready
+    @PostConstruct
     public void init() {
         setSizeFull();
         setSpacing(true);
