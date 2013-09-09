@@ -15,7 +15,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <peergreen.deployment.version>1.0.1</peergreen.deployment.version>
+    <peergreen.deployment.version>1.0.2-SNAPSHOT</peergreen.deployment.version>
   </properties>
 
   <dependencies>

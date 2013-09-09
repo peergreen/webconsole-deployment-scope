@@ -1,5 +1,6 @@
 package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
+import com.peergreen.webconsole.scope.deployment.internal.components.DeployableWindow;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.TreeTable;
 
@@ -13,6 +14,8 @@ public class TreeItemClickListener implements ItemClickEvent.ItemClickListener {
         if (!item.isDeployable()) {
             TreeTable treeTable = (TreeTable) event.getSource();
             treeTable.setCollapsed(event.getItemId(), !treeTable.isCollapsed(event.getItemId()));
+        } else if (event.isDoubleClick()) {
+            event.getComponent().getUI().addWindow(new DeployableWindow(item).getWindow());
         }
     }
 }

@@ -4,8 +4,13 @@ import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.List;
 
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
+import com.peergreen.deployment.report.ArtifactStatusReport;
+import com.peergreen.deployment.report.ArtifactStatusReportException;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.INotifierService;
@@ -16,6 +21,7 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShor
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.actions.SelectAll;
+import com.peergreen.webconsole.scope.deployment.internal.components.DeployableWindow;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
@@ -23,8 +29,10 @@ import com.peergreen.webconsole.scope.deployment.internal.container.entry.Deploy
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -47,6 +55,11 @@ public class DeployedPanel extends Panel implements DeployableContainer {
 
     public static final String TREE_ITEM_ID = "Deployed";
 
+    /**
+     * Logger.
+     */
+    private static final Log LOGGER = LogFactory.getLog(DeployedPanel.class);
+
     @Inject
     private ArtifactModelManager artifactModelManager;
     @Inject
@@ -57,6 +70,8 @@ public class DeployedPanel extends Panel implements DeployableContainer {
     private UIContext uiContext;
     @Inject
     private DeploymentViewManager deploymentViewManager;
+    @Inject
+    private DeploymentManager deploymentManager;
     private HierarchicalContainer container = new HierarchicalContainer();
 
     @PostConstruct
@@ -96,6 +111,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         final NativeSelect actionSelection = new NativeSelect();
         actionSelection.addItem(DeploymentActions.UNDEPLOY);
         actionSelection.addItem(DeploymentActions.DELETE);
+        actionSelection.addItem(DeploymentActions.DEPLOYMENT_PLAN);
         actionSelection.setWidth("100px");
         actionSelection.setNullSelectionAllowed(false);
 
@@ -106,7 +122,6 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         actionArea.addComponent(actionSelection);
         actionArea.addComponent(doButton);
         toolBar.addComponent(actionArea);
-        toolBar.setExpandRatio(actionArea, 2);
         toolBar.setComponentAlignment(actionArea, Alignment.TOP_RIGHT);
         mainContent.addComponent(toolBar);
 
@@ -128,6 +143,21 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         table.setItemCaptionPropertyId(TREE_ITEM_ID);
         table.setCellStyleGenerator(new TableItemStyle(DeployableContainerType.DEPLOYED));
         table.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, table, "Delete", ShortcutAction.KeyCode.DELETE, null));
+        table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                if (event.isDoubleClick()) {
+                    DeployableEntry deployableEntry = (DeployableEntry) event.getItemId();
+                    try {
+                        ArtifactStatusReport report = deploymentManager.getReport(deployableEntry.getUri().toString());
+                        event.getComponent().getUI().addWindow(new DeployableWindow(deployableEntry, report).getWindow());
+                    } catch (ArtifactStatusReportException e) {
+                        LOGGER.warn("Cannot get artifact status report for ''{0}''", deployableEntry.getUri(), e);
+                        event.getComponent().getUI().addWindow(new DeployableWindow(deployableEntry).getWindow());
+                    }
+                }
+            }
+        });
         deployedContainer.addComponent(table);
         deployedContainer.setExpandRatio(table, 1.5f);
 
