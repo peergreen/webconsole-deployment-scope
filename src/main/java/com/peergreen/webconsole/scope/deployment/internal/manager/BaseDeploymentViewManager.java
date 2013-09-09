@@ -30,6 +30,7 @@ import java.util.List;
 public class BaseDeploymentViewManager implements DeploymentViewManager {
 
     private HorizontalLayout framesContainer;
+    private Button deploymentPlanDraftViewer;
     private DeployableContainer deployableContainer;
     private DeployableContainer deployedContainer;
     private DeployableContainer deploymentPlanContainer;
@@ -53,6 +54,10 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
 
     public void setDeploymentPlanContainer(DeployableContainer deploymentPlanContainer) {
         this.deploymentPlanContainer = deploymentPlanContainer;
+    }
+
+    public void setDeploymentPlanDraftViewer(Button deploymentPlanDraftViewer) {
+        this.deploymentPlanDraftViewer = deploymentPlanDraftViewer;
     }
 
     @Override
@@ -174,12 +179,18 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
         if (framesContainer.getComponentIndex(deployedContainer.getView()) == -1) {
             framesContainer.removeComponent(deploymentPlanContainer.getView());
             framesContainer.addComponent(deployedContainer.getView());
+
+            if (deploymentPlanContainer.getContainer().getItemIds().size() > 0) {
+                deploymentPlanDraftViewer.setVisible(true);
+            } else {
+                deploymentPlanDraftViewer.setVisible(false);
+            }
         }
     }
 
     @Override
     public DeployableEntry getDeployableEntry(URI uri) {
-        DeployableEntry deployableEntry = deployedContainer == null ? null  : deployableContainer.getDeployable(uri);
+        DeployableEntry deployableEntry = deployedContainer == null ? null : deployableContainer.getDeployable(uri);
         if (deployableEntry == null) {
             deployableEntry = deployedContainer == null ? null : deployedContainer.getDeployable(uri);
             if (deployableEntry == null) {

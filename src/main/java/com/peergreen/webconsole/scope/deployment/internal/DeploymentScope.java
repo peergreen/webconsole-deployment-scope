@@ -17,12 +17,14 @@ import com.peergreen.webconsole.scope.deployment.internal.container.DeployableCo
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentPlanMakerDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.BaseDeploymentViewManager;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.felix.ipojo.ConfigurationException;
 import org.apache.felix.ipojo.Factory;
 import org.apache.felix.ipojo.MissingHandlerException;
@@ -104,6 +106,18 @@ public class DeploymentScope extends VerticalLayout {
         infoLabel.setSizeUndefined();
         final VerticalLayout deploymentPlanMaker = new VerticalLayout(infoLabel);
         deploymentPlanMaker.setComponentAlignment(infoLabel, Alignment.MIDDLE_CENTER);
+        Button draft = new Button("A draft is under construction");
+        draft.addStyleName("link");
+        draft.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                deploymentViewManager.showDeploymentPlanView();
+            }
+        });
+        draft.setVisible(false);
+        deploymentViewManager.setDeploymentPlanDraftViewer(draft);
+        deploymentPlanMaker.addComponent(draft);
+        deploymentPlanMaker.setComponentAlignment(draft, Alignment.TOP_CENTER);
         deploymentPlanMaker.setSizeFull();
         deploymentPlanMaker.addStyleName("drop-area");
         deploymentPlanMakerWrapper = new DragAndDropWrapper(deploymentPlanMaker);
