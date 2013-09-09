@@ -1,5 +1,12 @@
 package com.peergreen.webconsole.scope.deployment.internal.service;
 
+import java.util.Collections;
+
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
+
 import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.ArtifactProcessRequest;
@@ -7,13 +14,6 @@ import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.deployment.report.DeploymentStatusReport;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
-
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-
-import java.util.Collections;
 
 /**
  * @author Mohammed Boukada
@@ -70,7 +70,7 @@ public class BaseDeployer implements Deployer {
             artifactProcessRequest.setDeploymentMode(deploymentMode);
             notifierService.addNotification(String.format("'%s' is being %s.", artifact.name(), state));
             DeploymentStatusReport report = deploymentManager.process(Collections.singleton(artifactProcessRequest));
-            if (report.hasFailed()) {
+            if (report.isFailed()) {
                 state = FAILED_STATE;
                 notifierService.addNotification(String.format("'%s' has %s.", artifact.name(), state));
             } else {
