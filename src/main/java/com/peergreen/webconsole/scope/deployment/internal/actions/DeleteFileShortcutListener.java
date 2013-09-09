@@ -18,7 +18,7 @@ public class DeleteFileShortcutListener extends ShortcutListener {
     public DeleteFileShortcutListener(DeploymentViewManager deploymentViewManager, Table source, String caption, int keyCode, int... modifierKeys) {
         super(caption, keyCode, modifierKeys);
         this.deploymentViewManager = deploymentViewManager;
-          this.source = source;
+        this.source = source;
     }
 
     @Override

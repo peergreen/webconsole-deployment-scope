@@ -22,6 +22,7 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
+
 import org.apache.felix.ipojo.annotations.Requires;
 
 import javax.annotation.PostConstruct;

@@ -1,5 +1,14 @@
 package com.peergreen.webconsole.scope.deployment.internal.deploymentplan;
 
+import javax.annotation.PostConstruct;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collection;
+import java.util.List;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
@@ -39,15 +48,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;
-
-import javax.annotation.PostConstruct;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Mohammed Boukada
@@ -307,7 +307,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             if (checkDeploymentPlanName(deploymentPlanName)) {
-                String fileName =  Constants.STORAGE_DIRECTORY + File.separator + deploymentPlanName.getValue();
+                String fileName = Constants.STORAGE_DIRECTORY + File.separator + deploymentPlanName.getValue();
                 write(fileName);
                 URI uri = new File(fileName).toURI();
                 if (deployIt.getValue()) {

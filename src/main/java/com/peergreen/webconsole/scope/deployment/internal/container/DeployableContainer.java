@@ -12,13 +12,16 @@ import java.net.URI;
 public interface DeployableContainer {
 
     void receive(URI uri);
+
     void receive(DeployableEntry deployableEntry);
 
     void addDeployable(DeployableEntry deployableEntry);
+
     void removeDeployable(DeployableEntry deployableEntry);
 
     DeployableEntry getDeployable(URI uri);
 
     Component getView();
+
     HierarchicalContainer getContainer();
 }

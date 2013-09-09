@@ -4,6 +4,7 @@ import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.deployment.tracker.DeploymentServiceTracker;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;

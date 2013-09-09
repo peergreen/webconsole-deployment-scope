@@ -20,7 +20,8 @@ public class TableItemStyle implements Table.CellStyleGenerator {
             case DEPLOYABLE:
                 return "";
             case DEPLOYED:
-                return "deployed-entry";
+//                return "deployed-entry";
+                return "";
             case DEPLOYMENT_PLAN:
                 return "";
         }

@@ -47,7 +47,7 @@ public abstract class DeployableFetcher extends Thread {
         }
 
         DeployableEntry deployableEntry = deployableContainer.getDeployable(data.getUri());
-        if ( deployableEntry != null) {
+        if (deployableEntry != null) {
             if (container.containsId(deployableEntry)) {
                 return deployableEntry;
             }

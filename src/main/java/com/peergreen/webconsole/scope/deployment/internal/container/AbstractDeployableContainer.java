@@ -1,5 +1,14 @@
 package com.peergreen.webconsole.scope.deployment.internal.container;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
@@ -20,15 +29,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TreeTable;
 import com.vaadin.ui.VerticalLayout;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mohammed Boukada
@@ -181,13 +181,13 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
             String name = deployableEntry.getName();
             String extension = name.contains(".") ? name.substring(name.lastIndexOf('.')) : "";
             switch (extension) {
-                case XML_EXTENSION :
+                case XML_EXTENSION:
                     return new ClassResource(getClass(), "/images/16x16/xml-icon.png");
-                case JAR_EXTENSION :
+                case JAR_EXTENSION:
                     return new ClassResource(getClass(), "/images/16x16/jar-icon.png");
-                case WAR_EXTENSION :
+                case WAR_EXTENSION:
                     return new ClassResource(getClass(), "/images/16x16/war-icon.png");
-                default :
+                default:
                     return new ClassResource(getClass(), "/images/16x16/file-icon.png");
             }
         }
@@ -213,7 +213,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
                 for (Map.Entry<String, Object> property : properties.entrySet()) {
                     Property prop = item.getItemProperty(property.getKey());
                     if (prop != null) {
-                            prop.setValue(property.getValue());
+                        prop.setValue(property.getValue());
                     }
                 }
                 if (deployableEntry.getParent() != null) {

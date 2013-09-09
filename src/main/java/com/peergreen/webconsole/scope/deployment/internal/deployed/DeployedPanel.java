@@ -1,5 +1,9 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployed;
 
+import javax.annotation.PostConstruct;
+import java.net.URI;
+import java.util.List;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.webconsole.Extension;
@@ -34,10 +38,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import javax.annotation.PostConstruct;
-import java.net.URI;
-import java.util.List;
-
 /**
  * @author Mohammed Boukada
  */
@@ -69,7 +69,6 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         mainContent.setMargin(true);
         mainContent.setStyleName("deployable-style");
         mainContent.setSizeFull();
-        mainContent.setCaption("Deployables artifacts :");
 
         setContent(mainContent);
 
@@ -123,6 +122,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         table.setImmediate(true);
         table.setMultiSelect(true);
         table.setSelectable(true);
+        table.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         table.setContainerDataSource(container);
         table.setDragMode(Table.TableDragMode.MULTIROW);
         table.setItemCaptionPropertyId(TREE_ITEM_ID);

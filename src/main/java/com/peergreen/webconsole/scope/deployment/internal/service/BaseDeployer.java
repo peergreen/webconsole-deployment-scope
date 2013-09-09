@@ -7,6 +7,7 @@ import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.deployment.report.DeploymentStatusReport;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
+
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;

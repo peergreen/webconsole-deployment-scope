@@ -5,14 +5,16 @@ import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.service.Deployer;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Requires;

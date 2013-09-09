@@ -25,6 +25,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
+
 import org.apache.felix.ipojo.annotations.Requires;
 
 import javax.annotation.PostConstruct;

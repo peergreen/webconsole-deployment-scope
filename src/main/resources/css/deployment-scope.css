@@ -15,8 +15,9 @@
     overflow: hidden;
 }
 
-.v-table-row-deployed-entry {
-    background : -webkit-linear-gradient(top, #ffffff 0%, #fafafa 5%, #eaebec 94%, #e2e3e4 100%);
+.v-table-cell-content-deployed-entry {
+    /*background : -webkit-linear-gradient(top, #ffffff 0%, #fafafa 5%, #eaebec 94%, #e2e3e4 100%);*/
+    border-spacing : 5px !important;
     padding : 5px !important;
     width : 100%;
     border: 0.1em solid #b3b4b5;
