@@ -54,6 +54,7 @@ public class DeployableWindow {
             for (Endpoint endpoint : report.getEndpoints()) {
                 try {
                     Link link = new Link(endpoint.getURI().toString(), new ExternalResource(endpoint.getURI().toURL()));
+                    link.setTargetName("_blank");
                     endPointsLayout.addComponent(link);
                 } catch (MalformedURLException e) {
                     endPointsLayout.addComponent(new Label(endpoint.getURI().toString()));
