@@ -6,11 +6,11 @@ import com.vaadin.ui.Table;
 /**
  * @author Mohammed Boukada
  */
-public class TableItemStyle implements Table.CellStyleGenerator {
+public class ItemStyle implements Table.CellStyleGenerator {
 
     private DeployableContainerType containerType;
 
-    public TableItemStyle(DeployableContainerType containerType) {
+    public ItemStyle(DeployableContainerType containerType) {
         this.containerType = containerType;
     }
 

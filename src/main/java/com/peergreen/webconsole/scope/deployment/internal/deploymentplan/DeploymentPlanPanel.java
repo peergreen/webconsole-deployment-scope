@@ -20,7 +20,7 @@ import com.peergreen.webconsole.scope.deployment.internal.container.DeployableCo
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.peergreen.webconsole.vaadin.ConfirmDialog;
@@ -134,7 +134,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
         table.setContainerDataSource(container);
         table.setDragMode(Table.TableDragMode.MULTIROW);
         table.setItemCaptionPropertyId(TREE_ITEM_ID);
-        table.setCellStyleGenerator(new TableItemStyle(DeployableContainerType.DEPLOYED));
+        table.setCellStyleGenerator(new ItemStyle(DeployableContainerType.DEPLOYED));
         table.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         table.setDropHandler(new OrderedContainerDropHandler(table, deploymentPlanDropHandler));
         table.addShortcutListener(new ShortcutListener("Delete", ShortcutAction.KeyCode.DELETE, null) {

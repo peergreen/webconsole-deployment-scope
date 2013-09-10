@@ -26,7 +26,8 @@ import com.peergreen.webconsole.scope.deployment.internal.container.DeployableCo
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.TableItemStyle;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemDescription;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
@@ -141,8 +142,9 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         table.setContainerDataSource(container);
         table.setDragMode(Table.TableDragMode.MULTIROW);
         table.setItemCaptionPropertyId(TREE_ITEM_ID);
-        table.setCellStyleGenerator(new TableItemStyle(DeployableContainerType.DEPLOYED));
+        table.setCellStyleGenerator(new ItemStyle(DeployableContainerType.DEPLOYED));
         table.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, table, "Delete", ShortcutAction.KeyCode.DELETE, null));
+        table.setItemDescriptionGenerator(new ItemDescription());
         table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {

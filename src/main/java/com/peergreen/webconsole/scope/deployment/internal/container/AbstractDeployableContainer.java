@@ -15,6 +15,7 @@ import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemDescription;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher.DirectoryDeployableFetcher;
@@ -85,6 +86,7 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         tree.setSortContainerPropertyId(DEPLOYABLE_NAME);
         tree.setSortAscending(true);
         tree.addItemClickListener(new TreeItemClickListener());
+        tree.setItemDescriptionGenerator(new ItemDescription());
         fetching.setVisible(false);
     }
 
