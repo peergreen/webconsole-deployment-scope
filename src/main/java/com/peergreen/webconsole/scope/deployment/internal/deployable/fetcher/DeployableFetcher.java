@@ -1,16 +1,16 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher;
 
+import java.net.URI;
+
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.BaseNode;
 import com.peergreen.deployment.repository.Node;
 import com.peergreen.deployment.repository.maven.MavenNode;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.vaadin.data.util.HierarchicalContainer;
-
-import java.net.URI;
 
 /**
  * @author Mohammed Boukada
@@ -22,6 +22,7 @@ public abstract class DeployableFetcher extends Thread {
     private HierarchicalContainer container;
     private DeployableEntry parent;
     private URI uri;
+    private boolean fetching;
 
     protected DeployableFetcher(AbstractDeployableContainer deployableContainer,
                                 HierarchicalContainer container,
@@ -82,5 +83,13 @@ public abstract class DeployableFetcher extends Thread {
 
     public URI getUri() {
         return uri;
+    }
+
+    public boolean isFetching() {
+        return fetching;
+    }
+
+    public void setFetching(boolean fetching) {
+        this.fetching = fetching;
     }
 }

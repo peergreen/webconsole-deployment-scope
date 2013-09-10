@@ -1,12 +1,12 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher;
 
+import java.util.List;
+
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.Node;
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.deployment.repository.maven.MavenNode;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
-
-import java.util.List;
 
 /**
  * @author Mohammed Boukada
@@ -30,7 +30,9 @@ public class MavenDeployableFetcher extends DeployableFetcher {
     @Override
     public void run() {
         getDeployableContainer().startFetching("Fetching maven repositories...");
+        setFetching(true);
         updateTree();
+        setFetching(false);
         getDeployableContainer().stopFetching();
     }
 

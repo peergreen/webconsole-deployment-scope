@@ -1,11 +1,11 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.fetcher;
 
+import java.util.List;
+
 import com.peergreen.deployment.repository.BaseNode;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.Node;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
-
-import java.util.List;
 
 /**
  * @author Mohammed Boukada
@@ -23,7 +23,9 @@ public class DirectoryDeployableFetcher extends DeployableFetcher {
     @Override
     public void run() {
         getDeployableContainer().startFetching("Fetching directories...");
+        setFetching(true);
         updateTree();
+        setFetching(false);
         getDeployableContainer().stopFetching();
     }
 
