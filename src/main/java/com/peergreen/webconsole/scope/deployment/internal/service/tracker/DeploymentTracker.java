@@ -1,9 +1,7 @@
 package com.peergreen.webconsole.scope.deployment.internal.service.tracker;
 
-import com.peergreen.deployment.Artifact;
-import com.peergreen.deployment.DeploymentMode;
-import com.peergreen.deployment.tracker.DeploymentServiceTracker;
-import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Component;
@@ -11,8 +9,10 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Provides;
 import org.apache.felix.ipojo.annotations.Unbind;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.peergreen.deployment.Artifact;
+import com.peergreen.deployment.DeploymentMode;
+import com.peergreen.deployment.tracker.DeploymentServiceTracker;
+import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 
 /**
  * @author Mohammed Boukada

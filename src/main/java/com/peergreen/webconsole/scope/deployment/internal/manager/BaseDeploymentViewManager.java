@@ -1,5 +1,14 @@
 package com.peergreen.webconsole.scope.deployment.internal.manager;
 
+import java.io.File;
+import java.net.URI;
+import java.util.List;
+
+import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Provides;
+import org.apache.felix.ipojo.annotations.Requires;
+import org.apache.felix.ipojo.annotations.StaticServiceProperty;
+
 import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.webconsole.Constants;
@@ -14,15 +23,6 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.StaticServiceProperty;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
 
 /**
  * @author Mohammed Boukada

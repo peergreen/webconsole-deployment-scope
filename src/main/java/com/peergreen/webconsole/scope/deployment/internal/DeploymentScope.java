@@ -1,5 +1,17 @@
 package com.peergreen.webconsole.scope.deployment.internal;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.apache.felix.ipojo.ComponentInstance;
+import org.apache.felix.ipojo.ConfigurationException;
+import org.apache.felix.ipojo.Factory;
+import org.apache.felix.ipojo.MissingHandlerException;
+import org.apache.felix.ipojo.UnacceptableConfiguration;
+import org.apache.felix.ipojo.annotations.Requires;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
@@ -24,16 +36,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
-
-import org.apache.felix.ipojo.ConfigurationException;
-import org.apache.felix.ipojo.Factory;
-import org.apache.felix.ipojo.MissingHandlerException;
-import org.apache.felix.ipojo.UnacceptableConfiguration;
-import org.apache.felix.ipojo.annotations.Requires;
-
-import javax.annotation.PostConstruct;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 /**
  * @author Mohammed Boukada
