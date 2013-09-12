@@ -141,7 +141,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
         table.setContainerDataSource(container);
         table.setDragMode(Table.TableDragMode.MULTIROW);
         table.setItemCaptionPropertyId(TREE_ITEM_ID);
-        table.setCellStyleGenerator(new ItemStyle(DeployableContainerType.DEPLOYED));
+        table.setCellStyleGenerator(new ItemStyle(DeployableContainerType.DEPLOYED, deploymentManager));
         table.addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, table, "Delete", ShortcutAction.KeyCode.DELETE, null));
         table.setItemDescriptionGenerator(new ItemDescription());
         table.addItemClickListener(new ItemClickEvent.ItemClickListener() {

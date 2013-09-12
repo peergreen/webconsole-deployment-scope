@@ -15,6 +15,11 @@
     overflow: hidden;
 }
 
+.v-table-cell-content-deployed-entry-error {
+    color: #fff;
+    background: -webkit-linear-gradient(top, #ffffff 0%, #ff6666 5%, #ff4c4c 94%, #ff3232 100%);
+}
+
 .v-table-cell-content-deployed-entry {
     /*background : -webkit-linear-gradient(top, #ffffff 0%, #fafafa 5%, #eaebec 94%, #e2e3e4 100%);*/
     border-spacing : 5px !important;

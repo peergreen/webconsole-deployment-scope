@@ -1,6 +1,8 @@
 package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
+import com.peergreen.deployment.report.ArtifactStatusReportException;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
+import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
 import com.vaadin.ui.Table;
 
 /**
@@ -9,9 +11,15 @@ import com.vaadin.ui.Table;
 public class ItemStyle implements Table.CellStyleGenerator {
 
     private DeployableContainerType containerType;
+    private DeploymentManager deploymentManager;
 
     public ItemStyle(DeployableContainerType containerType) {
+        this(containerType, null);
+    }
+
+    public ItemStyle(DeployableContainerType containerType, DeploymentManager deploymentManager) {
         this.containerType = containerType;
+        this.deploymentManager = deploymentManager;
     }
 
     @Override
@@ -21,6 +29,15 @@ public class ItemStyle implements Table.CellStyleGenerator {
                 return "";
             case DEPLOYED:
 //                return "deployed-entry";
+                DeployableEntry deployableEntry = (DeployableEntry) itemId;
+                try {
+                    if (deploymentManager != null &&
+                        deploymentManager.getReport(deployableEntry.getUri().toString()).getExceptions().size() > 0) {
+                        return "deployed-entry-error";
+                    }
+                } catch (ArtifactStatusReportException e) {
+                    // do nothing
+                }
                 return "";
             case DEPLOYMENT_PLAN:
                 return "";

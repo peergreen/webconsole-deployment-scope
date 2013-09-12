@@ -3,10 +3,13 @@ package com.peergreen.webconsole.scope.deployment.internal.components;
 import java.net.MalformedURLException;
 
 import com.peergreen.deployment.facet.endpoint.Endpoint;
+import com.peergreen.deployment.report.ArtifactError;
+import com.peergreen.deployment.report.ArtifactErrorDetail;
 import com.peergreen.deployment.report.ArtifactStatusReport;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.vaadin.DefaultWindow;
 import com.vaadin.server.ExternalResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -42,14 +45,23 @@ public class DeployableWindow {
         Label uri = new Label(deployableEntry.getUri().toString());
         uri.setCaption("URI");
         content.addComponent(uri);
-        Label status = new Label();
+        VerticalLayout status = new VerticalLayout();
         status.setCaption("Status");
         content.addComponent(status);
         if (report == null) {
             // is not deployed yet
-            status.setValue("Ready to be deployed");
+            status.addComponent(new Label("Ready to be deployed"));
         } else {
-            status.setValue("Deployed");
+            if (report.getExceptions().size() == 0) {
+                status.addComponent(new Label("<p style=\"color:#329932\">Deployed</p>", ContentMode.HTML));
+            } else {
+                for (ArtifactError artifactError : report.getExceptions()) {
+                    for (ArtifactErrorDetail detail : artifactError.getDetails()) {
+                        ExceptionView exceptionView = new ExceptionView(detail);
+                        status.addComponent(exceptionView);
+                    }
+                }
+            }
             VerticalLayout endPointsLayout = new VerticalLayout();
             for (Endpoint endpoint : report.getEndpoints()) {
                 try {
