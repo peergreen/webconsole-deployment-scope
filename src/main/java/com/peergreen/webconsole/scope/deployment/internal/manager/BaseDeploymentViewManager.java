@@ -72,6 +72,13 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
         DeployableEntry deployableEntry = deployedContainer.getDeployable(uri);
         if (deployableEntry == null) {
             deployableEntry = new DeployableEntry(uri, DeployableSource.FILE);
+        } else if (DeployableSource.FILE.equals(deployableEntry.getSource())) {
+            // may be the artifact has been deleted ?
+            File file = new File(uri);
+            if (!file.exists()) {
+                deleteDeployable(deployableEntry);
+                return;
+            }
         }
         addToDeployable(deployableEntry);
     }
@@ -153,14 +160,18 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
                 @Override
                 public void onClose(boolean isConfirmed) {
                     if (isConfirmed && file.delete()) {
-                        if (deployableEntry.getContainer() != null) {
-                            deployableEntry.getContainer().removeDeployable(deployableEntry);
-                        }
-                        notifierService.addNotification(String.format("'%s' was deleted.", file.getName()));
+                        deleteDeployable(deployableEntry);
                     }
                 }
             });
         }
+    }
+
+    private void deleteDeployable(DeployableEntry deployableEntry) {
+        if (deployableEntry.getContainer() != null) {
+            deployableEntry.getContainer().removeDeployable(deployableEntry);
+        }
+        notifierService.addNotification(String.format("'%s' was deleted.", deployableEntry.getName()));
     }
 
     @Override
