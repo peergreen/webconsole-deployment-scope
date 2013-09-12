@@ -55,8 +55,9 @@ public class DeploymentScope extends VerticalLayout {
     private Factory deploymentViewManagerFactory;
 
     private DragAndDropWrapper deploymentPlanMakerWrapper;
-    private BaseDeploymentViewManager deploymentViewManager;
     private HorizontalLayout framesContainer;
+    private BaseDeploymentViewManager deploymentViewManager;
+    private ComponentInstance deploymentViewManagerComponentInstance;
 
     private HelpOverlay helpWindow;
 
@@ -137,13 +138,21 @@ public class DeploymentScope extends VerticalLayout {
                         "<p>You can also drag files from desktop and drop them where you want to add them.");
     }
 
+    @PreDestroy
+    public void stop() {
+        if (deploymentViewManagerComponentInstance != null) {
+            deploymentViewManagerComponentInstance.stop();
+            deploymentViewManagerComponentInstance.dispose();
+        }
+    }
+
     private BaseDeploymentViewManager createDeploymentViewManager() {
         BaseDeploymentViewManager baseDeploymentViewManager = new BaseDeploymentViewManager(framesContainer);
         Dictionary<String, Object> properties = new Hashtable<>();
         properties.put(Constants.UI_ID, uiContext.getUIId());
         properties.put("instance.object", baseDeploymentViewManager);
         try {
-            deploymentViewManagerFactory.createComponentInstance(properties);
+            deploymentViewManagerComponentInstance = deploymentViewManagerFactory.createComponentInstance(properties);
         } catch (UnacceptableConfiguration | MissingHandlerException | ConfigurationException unacceptableConfiguration) {
             return null;
         }
