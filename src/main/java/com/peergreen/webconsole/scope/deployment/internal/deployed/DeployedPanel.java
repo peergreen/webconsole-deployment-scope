@@ -25,7 +25,6 @@ import com.peergreen.webconsole.scope.deployment.internal.components.DeployableW
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemDescription;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.ItemStyle;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
@@ -169,7 +168,7 @@ public class DeployedPanel extends Panel implements DeployableContainer {
     @Override
     public void receive(URI uri) {
         if (getDeployable(uri) == null) {
-            DeployableEntry deployableEntry = new DeployableEntry(uri, DeployableSource.FILE);
+            DeployableEntry deployableEntry = deploymentViewManager.getDeployableEntry(uri);
             receive(deployableEntry);
         }
     }
