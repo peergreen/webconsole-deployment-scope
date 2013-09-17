@@ -10,15 +10,8 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.components;
 
-import com.peergreen.deployment.ArtifactBuilder;
-import com.peergreen.webconsole.Constants;
-import com.peergreen.webconsole.INotifierService;
-import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
-import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.Upload;
-
-import org.ow2.util.log.Log;
-import org.ow2.util.log.LogFactory;
+import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYED;
+import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYMENT_PLAN;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,14 +19,22 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
-import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYED;
-import static com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType.DEPLOYMENT_PLAN;
+import org.ow2.util.log.Log;
+import org.ow2.util.log.LogFactory;
+
+import com.peergreen.deployment.ArtifactBuilder;
+import com.peergreen.webconsole.Constants;
+import com.peergreen.webconsole.notifier.INotifierService;
+import com.peergreen.webconsole.notifier.Task;
+import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import com.vaadin.ui.OptionGroup;
+import com.vaadin.ui.Upload;
 
 
 /**
  * @author Mohammed Boukada
  */
-public class FileUploader implements Upload.Receiver, Upload.SucceededListener, Upload.FailedListener, Upload.StartedListener, Upload.ProgressListener {
+public class FileUploader implements Upload.Receiver, Upload.SucceededListener, Upload.FailedListener, Upload.StartedListener {
 
     /**
      * Logger.
@@ -44,6 +45,7 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
     private INotifierService notifierService;
     private ArtifactBuilder artifactBuilder;
     private OptionGroup option;
+    private Task uploadTask;
 
     public FileUploader(DeploymentViewManager deploymentViewService, INotifierService notifierService, ArtifactBuilder artifactBuilder, OptionGroup option) {
         (new File(Constants.STORAGE_DIRECTORY)).mkdirs();
@@ -71,7 +73,7 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
 
     @Override
     public void uploadSucceeded(Upload.SucceededEvent event) {
-        notifierService.stopTask(this);
+        uploadTask.stop();
         notifierService.addNotification(String.format("'%s' was uploaded.", event.getFilename()));
         URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + event.getFilename()).toURI();
         String optionValue = (String) option.getValue();
@@ -89,16 +91,12 @@ public class FileUploader implements Upload.Receiver, Upload.SucceededListener, 
 
     @Override
     public void uploadFailed(Upload.FailedEvent event) {
+        uploadTask.stop();
         notifierService.addNotification("Fail to upload '" + event.getFilename() + "'.");
     }
 
     @Override
-    public void updateProgress(long readBytes, long contentLength) {
-        notifierService.updateTask(this, readBytes);
-    }
-
-    @Override
     public void uploadStarted(Upload.StartedEvent event) {
-        notifierService.startTask(this, "Uploading '" + event.getFilename() + "'", event.getContentLength());
+        uploadTask = notifierService.createTask("Uploading '" + event.getFilename() + "'");
     }
 }

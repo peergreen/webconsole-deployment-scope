@@ -19,6 +19,7 @@ public class DesktopDragAndDropStream implements StreamVariable {
     private String fileName;
     private INotifierService notifierService;
     private DeployableContainer deployableContainer;
+    private Task uploadTask;
 
     public DesktopDragAndDropStream(FileOutputStream fos,
                                     String fileName,
@@ -41,18 +42,18 @@ public class DesktopDragAndDropStream implements StreamVariable {
     }
 
     @Override
-    public void onProgress(StreamVariable.StreamingProgressEvent event) {
-        notifierService.updateTask(this, event.getBytesReceived());
+    public void onProgress(StreamingProgressEvent streamingProgressEvent) {
+        // hope it lasts ...
     }
 
     @Override
     public void streamingStarted(StreamVariable.StreamingStartEvent event) {
-        notifierService.startTask(this, "Uploading '" + event.getFileName() + "'", event.getContentLength());
+        uploadTask = notifierService.createTask("Uploading '" + event.getFileName() + "'");
     }
 
     @Override
     public void streamingFinished(StreamVariable.StreamingEndEvent event) {
-        notifierService.stopTask(this);
+        uploadTask.stop();
         URI uri = new File(Constants.STORAGE_DIRECTORY + File.separator + fileName).toURI();
         deployableContainer.receive(uri);
         notifierService.addNotification("'" + fileName + "' was uploaded.");
@@ -60,6 +61,7 @@ public class DesktopDragAndDropStream implements StreamVariable {
 
     @Override
     public void streamingFailed(StreamVariable.StreamingErrorEvent event) {
+        uploadTask.stop();
         notifierService.addNotification("Fail to upload '" + fileName + "'.");
     }
 

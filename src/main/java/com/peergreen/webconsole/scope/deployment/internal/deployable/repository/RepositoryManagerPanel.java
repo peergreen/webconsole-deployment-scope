@@ -1,12 +1,24 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.repository;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.felix.ipojo.annotations.Bind;
+
 import com.peergreen.deployment.repository.RepositoryManager;
+import com.peergreen.deployment.repository.RepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.UIContext;
+import com.peergreen.webconsole.notifier.INotifierService;
+import com.peergreen.webconsole.notifier.Task;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.vaadin.DefaultWindow;
 import com.vaadin.event.FieldEvents;
@@ -23,11 +35,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * @author Mohammed Boukada
  */
@@ -38,11 +45,14 @@ public class RepositoryManagerPanel extends Panel {
 
     private VerticalLayout contentLayout = new VerticalLayout();
     private List<RepositoryEntry> repositories = new CopyOnWriteArrayList<>();
+    private Map<String, Task> tasks = new ConcurrentHashMap<>();
 
     @Inject
     private RepositoryManager repositoryManager;
     @Inject
     private UIContext uiContext;
+    @Inject
+    private INotifierService notifierService;
 
     @PostConstruct
     public void init() {
@@ -99,6 +109,15 @@ public class RepositoryManagerPanel extends Panel {
     public void attach() {
         super.attach();
         updateRepositories();
+    }
+
+    @Bind(optional = true, aggregate = true, filter = "(!(|(repository.type=" + RepositoryType.SUPER + ")" +
+            "(repository.type=" + RepositoryType.FACADE + ")))")
+    public void bindRepository(RepositoryService repositoryService) {
+        Repository repository = repositoryService.getAttributes().as(Repository.class);
+        if (tasks.containsKey(repository.getUrl())) {
+            tasks.get(repository.getUrl()).stop();
+        }
     }
 
     private class RepositoryFilter implements FieldEvents.TextChangeListener {
@@ -188,10 +207,11 @@ public class RepositoryManagerPanel extends Panel {
                     if (validateURL(repositoryURLTextField.getValue(), (String) types.getValue())) {
                         if ("".equals(repositoryNameTextField.getValue())) {
                             error.setValue("Please give a name");
-                        } else if (RepositoryType.DIRECTORY.equals(types.getValue()) && !new File(repositoryURLTextField.getValue()).exists()) {
-                            error.setValue("This directory does not exist");
                         } else {
-                            repositoryManager.addRepository(repositoryURLTextField.getValue(), repositoryNameTextField.getValue(), (String) types.getValue());
+                            String url = getURL(repositoryURLTextField.getValue(), (String) types.getValue());
+                            Task task = notifierService.createTask(String.format("Adding '%s' repository ...", repositoryNameTextField.getValue()));
+                            tasks.put(url, task);
+                            repositoryManager.addRepository(url, repositoryNameTextField.getValue(), (String) types.getValue());
                             creationWindow.close();
                         }
                     }
@@ -207,10 +227,11 @@ public class RepositoryManagerPanel extends Panel {
 
             switch (type) {
                 case RepositoryType.DIRECTORY:
-                    if (url.startsWith("file:")) {
+                    File file = new File(url);
+                    if (file.exists()) {
                         return true;
                     } else {
-                        error.setValue("Wrong directory URL");
+                        error.setValue("This directory does not exists");
                         return false;
                     }
                 case RepositoryType.MAVEN:
@@ -223,6 +244,18 @@ public class RepositoryManagerPanel extends Panel {
                 default:
                     return false;
             }
+        }
+
+        private String getURL(String url, String type) {
+            String tmp = url;
+            if (RepositoryType.DIRECTORY.equals(type)) {
+                tmp = new File(url).toURI().toString();
+            }
+
+            if (tmp.charAt(tmp.length() - 1) != '/') {
+                tmp += '/';
+            }
+            return tmp;
         }
     }
 }
