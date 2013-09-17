@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 Peergreen S.A.S. All rights reserved.
  *
  * Unless required by applicable law or agreed to in writing, software
