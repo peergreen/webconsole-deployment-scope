@@ -47,6 +47,10 @@ public class DeployableEntry {
         return source;
     }
 
+    public void setSource(DeployableSource source) {
+        this.source = source;
+    }
+
     public URI getUri() {
         return uri;
     }

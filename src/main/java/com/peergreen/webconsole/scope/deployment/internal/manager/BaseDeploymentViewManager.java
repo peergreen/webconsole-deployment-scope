@@ -73,11 +73,13 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
         if (deployableEntry == null) {
             deployableEntry = new DeployableEntry(uri, DeployableSource.FILE);
         } else if (DeployableSource.FILE.equals(deployableEntry.getSource())) {
-            // may be the artifact has been deleted ?
-            File file = new File(uri);
-            if (!file.exists()) {
-                deleteDeployable(deployableEntry);
-                return;
+            if (checkDeployableSource(deployableEntry)) {
+                // may be the artifact has been deleted ?
+                File file = new File(uri);
+                if (!file.exists()) {
+                    deleteDeployable(deployableEntry);
+                    return;
+                }
             }
         }
         addToDeployable(deployableEntry);
@@ -160,6 +162,10 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
                 @Override
                 public void onClose(boolean isConfirmed) {
                     if (isConfirmed && file.delete()) {
+                        if (deployableEntry.getParent() != null) {
+                            File parentFile = new File(deployableEntry.getParent().getUri());
+                            parentFile.setLastModified(System.currentTimeMillis());
+                        }
                         deleteDeployable(deployableEntry);
                     }
                 }
@@ -223,5 +229,19 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
             return DeployableSource.MAVEN;
         }
         return DeployableSource.FILE;
+    }
+
+    /**
+     * Check if stored Deployable source match the expected source according to the URI prefix
+     * @param deployableEntry deployable entry
+     * @return true if sources match, false otherwise.
+     */
+    private boolean checkDeployableSource(DeployableEntry deployableEntry) {
+        DeployableSource expected = getDeployableSource(deployableEntry.getUri());
+        if (!expected.equals(deployableEntry.getSource())) {
+            deployableEntry.setSource(expected);
+            return false;
+        }
+        return true;
     }
 }
