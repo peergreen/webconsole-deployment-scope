@@ -33,7 +33,7 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
     @Override
     public void nodeExpand(Tree.ExpandEvent event) {
         DeployableEntry parent = (DeployableEntry) event.getItemId();
-        if (DeployableSource.MAVEN.equals(parent.getSource()) && !isFetching(currentMavenFetcher)) {
+        if (DeployableSource.MAVEN.equals(parent.getSource())) {
             MavenDeployableEntry mavenDeployableEntry = (MavenDeployableEntry) parent;
             MavenArtifactInfo mavenArtifactInfo = mavenDeployableEntry.getArtifactInfo();
             MavenDeployableFetcher fetcher = new MavenDeployableFetcher(deployableContainer, mavenRepositoryService);
@@ -42,7 +42,7 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
             fetcher.setParent(parent);
             currentMavenFetcher = fetcher;
             fetcher.start();
-        } else if (DeployableSource.FILE.equals(parent.getSource()) && !isFetching(currentDirectoryFetcher)) {
+        } else if (DeployableSource.FILE.equals(parent.getSource())) {
             DirectoryDeployableFetcher fetcher = new DirectoryDeployableFetcher(deployableContainer, directoryRepositoryService);
             fetcher.setUri(parent.getUri());
             fetcher.setParent(parent);
