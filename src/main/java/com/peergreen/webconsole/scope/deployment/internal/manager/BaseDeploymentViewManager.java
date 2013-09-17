@@ -12,7 +12,7 @@ import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.webconsole.Constants;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;

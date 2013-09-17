@@ -13,7 +13,7 @@ import com.peergreen.deployment.report.ArtifactStatusReport;
 import com.peergreen.deployment.report.ArtifactStatusReportException;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;

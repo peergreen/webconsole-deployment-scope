@@ -12,7 +12,7 @@ import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.ArtifactProcessRequest;
 import com.peergreen.deployment.DeploymentMode;
 import com.peergreen.deployment.report.DeploymentStatusReport;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.service.facade.DeploymentManager;
 
 /**

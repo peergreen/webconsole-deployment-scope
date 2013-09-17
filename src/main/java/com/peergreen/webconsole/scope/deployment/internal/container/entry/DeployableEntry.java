@@ -1,11 +1,11 @@
 package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
-import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
-
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 
 /**
  * @author Mohammed Boukada

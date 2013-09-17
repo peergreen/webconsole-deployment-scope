@@ -4,7 +4,7 @@ import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
 import com.peergreen.webconsole.Unlink;

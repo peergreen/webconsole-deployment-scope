@@ -17,7 +17,7 @@ import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.HelpOverlay;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
 import com.peergreen.webconsole.Scope;
@@ -89,7 +89,6 @@ public class DeploymentScope extends VerticalLayout {
         final FileUploader fileUploader = new FileUploader(deploymentViewManager, notifierService, artifactBuilder, option);
         uploader.setReceiver(fileUploader);
         uploader.addSucceededListener(fileUploader);
-        uploader.addProgressListener(fileUploader);
         uploader.addStartedListener(fileUploader);
         uploadLayout.addComponent(uploader);
         HorizontalLayout target = new HorizontalLayout();

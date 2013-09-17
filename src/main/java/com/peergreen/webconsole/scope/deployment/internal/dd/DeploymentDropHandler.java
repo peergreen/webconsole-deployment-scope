@@ -10,8 +10,14 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.dd;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Collection;
+import java.util.Collections;
+
 import com.peergreen.webconsole.Constants;
-import com.peergreen.webconsole.INotifierService;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
@@ -27,12 +33,6 @@ import com.vaadin.ui.DragAndDropWrapper;
 import com.vaadin.ui.Html5File;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * @author Mohammed Boukada
