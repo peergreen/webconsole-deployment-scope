@@ -58,7 +58,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
 
     private static final String TREE_ITEM_ID = "Deployable";
     private static final String DEFAULT_DP_NAME_PREFIX = "deployment-plan-";
-    public static final String XML_EXTENSION = ".xml";
+    public static final String URLS_PLAN_EXTENSION = ".urls";
 
     @Inject
     private ArtifactBuilder artifactBuilder;
@@ -253,7 +253,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
     }
 
     private String getDefaultName() {
-        return DEFAULT_DP_NAME_PREFIX + System.currentTimeMillis() + XML_EXTENSION;
+        return DEFAULT_DP_NAME_PREFIX + System.currentTimeMillis() + URLS_PLAN_EXTENSION;
     }
 
     protected void clearDeploymentPlanPanel() {
@@ -327,9 +327,8 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
             if (name == null || "".equals(name)) {
                 name = textField.getInputPrompt();
             }
-            if (!name.endsWith(XML_EXTENSION)) {
-                error.setValue(String.format("'%s' is not valid", name));
-                return false;
+            if (!name.endsWith(URLS_PLAN_EXTENSION)) {
+                name += URLS_PLAN_EXTENSION;
             }
 
             File storageDir = new File(Constants.STORAGE_DIRECTORY);
