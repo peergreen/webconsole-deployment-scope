@@ -21,6 +21,8 @@ import org.apache.felix.ipojo.annotations.Unbind;
 
 import com.peergreen.deployment.Artifact;
 import com.peergreen.deployment.DeploymentMode;
+import com.peergreen.deployment.model.ArtifactModel;
+import com.peergreen.deployment.report.ArtifactStatusReport;
 import com.peergreen.deployment.tracker.DeploymentServiceTracker;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 
@@ -32,10 +34,10 @@ import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentView
 @Provides
 public class DeploymentTracker implements DeploymentServiceTracker {
 
-    private List<DeploymentViewManager> deploymentViewManagers = new CopyOnWriteArrayList<>();
+    private final List<DeploymentViewManager> deploymentViewManagers = new CopyOnWriteArrayList<>();
 
     @Override
-    public void onChange(Artifact artifact, DeploymentMode deploymentMode) {
+    public void beforeProcessing(Artifact artifact, DeploymentMode deploymentMode) {
         switch (deploymentMode) {
             case DEPLOY:
                 for (DeploymentViewManager deploymentViewManager : deploymentViewManagers) {
@@ -58,5 +60,11 @@ public class DeploymentTracker implements DeploymentServiceTracker {
     @Unbind
     public void unbindDeploymentViewManager(DeploymentViewManager deploymentViewManager) {
         deploymentViewManagers.remove(deploymentViewManager);
+    }
+
+    @Override
+    public void afterProcessing(ArtifactModel artifactModel, DeploymentMode deploymentMode,
+            ArtifactStatusReport artifactStatusReport) {
+
     }
 }
