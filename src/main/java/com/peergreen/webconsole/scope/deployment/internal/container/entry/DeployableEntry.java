@@ -53,6 +53,10 @@ public class DeployableEntry {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public DeployableSource getSource() {
         return source;
     }

@@ -10,11 +10,20 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.deployable.directory;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.apache.felix.ipojo.annotations.Bind;
+import org.apache.felix.ipojo.annotations.Requires;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
+import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
@@ -25,21 +34,19 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShor
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
+import com.peergreen.webconsole.scope.deployment.internal.deployable.repository.RepositoryManagerPanel;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
+import com.vaadin.data.Item;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
-
-import org.apache.felix.ipojo.annotations.Requires;
-
-import javax.annotation.PostConstruct;
-import java.io.File;
 
 /**
  * @author Mohammed Boukada
@@ -144,5 +151,27 @@ public class DirectoryView extends AbstractDeployableContainer {
             url += '/';
         }
         return url;
+    }
+
+    @Bind(optional = true, aggregate = true, filter = "(!(|(repository.type=" + RepositoryType.SUPER + ")" +
+            "(repository.type=" + RepositoryType.FACADE + ")))")
+    public void bindRepository(DirectoryRepositoryService repositoryService) throws URISyntaxException {
+        final Repository repository = repositoryService.getAttributes().as(Repository.class);
+        final DeployableEntry deployableEntry = getDeployable(new URI(repository.getUrl()));
+        if (deployableEntry != null) {
+            deployableEntry.setName(repository.getName());
+            uiContext.getUI().access(new Runnable() {
+                @Override
+                public void run() {
+                    Item item = getContainer().getItem(deployableEntry);
+                    item.getItemProperty(DEPLOYABLE_NAME).setValue(repository.getName());
+                }
+            });
+        }
+    }
+
+    @Bind(optional = true)
+    public void bindRepositoryManagerPanel(RepositoryManagerPanel repositoryManagerPanel) {
+        repositoryManagerPanel.setDirectoryContainer(this);
     }
 }
