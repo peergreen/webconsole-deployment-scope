@@ -65,6 +65,8 @@ public class DeploymentTracker implements DeploymentServiceTracker {
     @Override
     public void afterProcessing(ArtifactModel artifactModel, DeploymentMode deploymentMode,
             ArtifactStatusReport artifactStatusReport) {
-
+        for (DeploymentViewManager deploymentViewManager : deploymentViewManagers) {
+            deploymentViewManager.showDeployedView();
+        }
     }
 }

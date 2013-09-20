@@ -214,6 +214,10 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
             } else {
                 deploymentPlanDraftViewer.setVisible(false);
             }
+        } else {
+            if (deployedContainer.getView().isAttached()) {
+                deployedContainer.getView().attach();
+            }
         }
     }
 

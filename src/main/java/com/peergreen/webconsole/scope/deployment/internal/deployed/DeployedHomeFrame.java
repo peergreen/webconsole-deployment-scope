@@ -76,21 +76,5 @@ public class DeployedHomeFrame extends Table {
                 }
             }
         });
-        deployedPanel.getView().addAttachListener(new DeployedPanelAttachListener(this));
-    }
-
-
-    private class DeployedPanelAttachListener implements AttachListener {
-
-        private Table table;
-
-        private DeployedPanelAttachListener(Table table) {
-            this.table = table;
-        }
-
-        @Override
-        public void attach(AttachEvent attachEvent) {
-            table.attach();
-        }
     }
 }
