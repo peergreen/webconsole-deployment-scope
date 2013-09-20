@@ -10,14 +10,20 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.deployable;
 
+import javax.annotation.PostConstruct;
+import java.net.URI;
+import java.util.Dictionary;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
-import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
 import com.peergreen.webconsole.Unlink;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentDropHandler;
@@ -32,12 +38,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
-
-import javax.annotation.PostConstruct;
-import java.net.URI;
-import java.util.Dictionary;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Mohammed Boukada
@@ -82,8 +82,8 @@ public class DeployablePanel extends Panel implements DeployableContainer {
             public void buttonClick(Button.ClickEvent event) {
                 if (tabSheet.getTab(manager) == null) {
                     tabSheet.addTab(manager, "Manager", new ClassResource(getClass(), "/images/22x22/configuration.png"), containers.size()).setClosable(true);
-                    tabSheet.setSelectedTab(manager);
                 }
+                tabSheet.setSelectedTab(manager);
             }
         });
         header.addComponent(openManager);
@@ -141,8 +141,11 @@ public class DeployablePanel extends Panel implements DeployableContainer {
 
     @Override
     public DeployableEntry getDeployable(URI uri) {
-        DeployableEntry deployableEntry = directoryView.getDeployable(uri);
-        if (deployableEntry == null) {
+        DeployableEntry deployableEntry = null;
+        if (directoryView != null) {
+            deployableEntry = directoryView.getDeployable(uri);
+        }
+        if (deployableEntry == null && mavenView != null) {
             deployableEntry = mavenView.getDeployable(uri);
         }
         return deployableEntry;
