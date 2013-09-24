@@ -71,7 +71,7 @@
     <dependency>
       <groupId>com.peergreen.deployment</groupId>
       <artifactId>deployment-api</artifactId>
-      <version>1.0.2-SNAPSHOT</version>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>com.peergreen.deployment</groupId>

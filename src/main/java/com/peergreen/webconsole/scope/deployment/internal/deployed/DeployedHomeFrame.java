@@ -45,7 +45,7 @@ public class DeployedHomeFrame extends Table {
     private static final Log LOGGER = LogFactory.getLog(DeployedHomeFrame.class);
 
     @Inject
-    DeployedPanel deployedPanel;
+    private DeployedPanel deployedPanel;
     @Inject
     private DeploymentManager deploymentManager;
 
