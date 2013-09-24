@@ -10,8 +10,6 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.deployable.repository;
 
-import static com.peergreen.deployment.repository.maven.MavenArtifactInfo.Type.REPOSITORY;
-
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.net.URI;
@@ -28,7 +26,6 @@ import org.ow2.util.log.LogFactory;
 import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
-import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
@@ -37,9 +34,6 @@ import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.notifier.Task;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.MavenDeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.vaadin.DefaultWindow;
 import com.vaadin.event.FieldEvents;
@@ -112,6 +106,7 @@ public class BaseRepositoryManagerPanel extends Panel implements RepositoryManag
         mainLayout.addComponent(header);
         mainLayout.addComponent(contentLayout);
         mainLayout.setExpandRatio(contentLayout, 1.5f);
+
         updateRepositories();
     }
 
@@ -175,6 +170,37 @@ public class BaseRepositoryManagerPanel extends Panel implements RepositoryManag
                 }
             }
         }
+    }
+
+    public void addRepository(String url, String name, String type) {
+        Task task = notifierService.createTask(String.format("Adding '%s' repository ...", name));
+        tasks.put(url, task);
+
+        URI uri = null;
+        try {
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            LOGGER.error("Cannot create URI for ''{0}''", url, e);
+        }
+
+        if (uri != null) {
+            String entryName = name + " [Updating index ...]";
+            if (RepositoryType.DIRECTORY.equals(type) && directoryContainer != null) {
+                directoryContainer.addRootItemToContainer(entryName, uri);
+            } else if (RepositoryType.MAVEN.equals(type) && mavenContainer != null) {
+                mavenContainer.addRootItemToContainer(entryName, uri);
+            }
+        }
+        repositoryManager.addRepository(url, name, type);
+    }
+
+    public boolean containsRepository(String url) {
+        for (Repository repository : repositoryManager.getRepositories()) {
+            if (repository.getUrl().equals(url)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private class CreateNewRepositoryListener implements Button.ClickListener {
@@ -256,39 +282,6 @@ public class BaseRepositoryManagerPanel extends Panel implements RepositoryManag
                     }
                 }
             });
-        }
-
-        private void addRepository(String url, String name, String type) {
-            Task task = notifierService.createTask(String.format("Adding '%s' repository ...", name));
-            tasks.put(url, task);
-            repositoryManager.addRepository(url, name, type);
-
-            URI uri = null;
-            try {
-                uri = new URI(url);
-            } catch (URISyntaxException e) {
-                LOGGER.error("Cannot create URI for ''{0}''", url, e);
-            }
-
-            if (uri != null) {
-                String entryName = name + " [Updating index ...]";
-                if (RepositoryType.DIRECTORY.equals(type) && directoryContainer != null) {
-                    DeployableEntry deployableEntry = directoryContainer.getDeployable(uri);
-                    if (deployableEntry == null) {
-                        deployableEntry = new DeployableEntry(uri, entryName, DeployableSource.FILE, directoryContainer, null);
-                        deployableEntry.setDeployable(false);
-                        directoryContainer.addItemToContainer(deployableEntry, directoryContainer.getContainerProperties(deployableEntry), false);
-                    }
-                } else if (RepositoryType.MAVEN.equals(type) && mavenContainer != null) {
-                    DeployableEntry deployableEntry = mavenContainer.getDeployable(uri);
-                    if (deployableEntry == null) {
-                        MavenArtifactInfo mavenArtifactInfo = new MavenArtifactInfo(url, null, null, null, null, REPOSITORY);
-                        deployableEntry = new MavenDeployableEntry(uri, entryName, DeployableSource.MAVEN, mavenContainer, null, mavenArtifactInfo);
-                        deployableEntry.setDeployable(false);
-                        mavenContainer.addItemToContainer(deployableEntry, mavenContainer.getContainerProperties(deployableEntry), false);
-                    }
-                }
-            }
         }
 
         private boolean validateURL(String url, String type) {

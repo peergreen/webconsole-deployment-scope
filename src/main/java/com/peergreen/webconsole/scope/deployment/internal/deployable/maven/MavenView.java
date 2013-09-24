@@ -11,7 +11,6 @@
 package com.peergreen.webconsole.scope.deployment.internal.deployable.maven;
 
 import javax.annotation.PostConstruct;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -28,17 +27,16 @@ import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.UIContext;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.repository.RepositoryManagerPanel;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
-import com.vaadin.data.Item;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -58,6 +56,8 @@ public class MavenView extends AbstractDeployableContainer {
     @Inject
     private UIContext uiContext;
     @Inject
+    private INotifierService notifierService;
+    @Inject
     private ArtifactBuilder artifactBuilder;
     @Inject
     private ArtifactModelManager artifactModelManager;
@@ -73,11 +73,12 @@ public class MavenView extends AbstractDeployableContainer {
     }
 
     @PostConstruct
-    public void init() {
+    public void init() throws URISyntaxException {
         super.init(uiContext, artifactModelManager);
 
         repositoryManager.loadRepositoriesInCache();
-        repositoryManager.addRepository("https://forge.peergreen.com/repository/content/repositories/releases/", "Peergreen Releases", RepositoryType.MAVEN);
+        addRootItemToContainer("Peergreen Releases", new URI("https://forge.peergreen.com/repository/content/repositories/releases/"));
+        addRootItemToContainer("Maven Central", new URI("http://repo1.maven.org/maven2/"));
 
         HorizontalLayout header = new HorizontalLayout();
         header.setWidth("100%");
@@ -135,7 +136,7 @@ public class MavenView extends AbstractDeployableContainer {
         repositoryInfo.setComponentAlignment(getFetching(), Alignment.MIDDLE_LEFT);
         addComponent(repositoryInfo);
 
-        getTree().addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
+        getTree().addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService, repositoryManager));
         addComponent(getTree());
         setExpandRatio(getTree(), 1.5f);
 
@@ -156,16 +157,9 @@ public class MavenView extends AbstractDeployableContainer {
             "(repository.type=" + RepositoryType.FACADE + ")))")
     public void bindRepository(MavenRepositoryService repositoryService) throws URISyntaxException {
         final Repository repository = repositoryService.getAttributes().as(Repository.class);
-        final DeployableEntry deployableEntry = getDeployable(new URI(repository.getUrl()));
-        if (deployableEntry != null) {
-            deployableEntry.setName(repository.getName());
-            uiContext.getUI().access(new Runnable() {
-                @Override
-                public void run() {
-                    Item item = getContainer().getItem(deployableEntry);
-                    item.getItemProperty(DEPLOYABLE_NAME).setValue(repository.getName());
-                }
-            });
+        addRootItemToContainer(repository.getName(), new URI(repository.getUrl()));
+        if (isAttached()) {
+            notifierService.addNotification(String.format("Maven repository '%s' was added.", repository.getName()));
         }
     }
 

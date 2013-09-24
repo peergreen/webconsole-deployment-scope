@@ -10,6 +10,8 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.container;
 
+import static com.peergreen.deployment.repository.maven.MavenArtifactInfo.Type.REPOSITORY;
+
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,6 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
+import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
@@ -215,6 +218,31 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     protected void updateTree(MavenRepositoryService mavenRepositoryService) {
         MavenDeployableFetcher fetcher = new MavenDeployableFetcher(this, mavenRepositoryService);
         fetcher.start();
+    }
+
+    public void addRootItemToContainer(final String name, URI uri) {
+        DeployableEntry deployableEntry = getDeployable(uri);
+        if (deployableEntry == null) {
+            if (DeployableSource.FILE.equals(deployableSource)) {
+                deployableEntry = new DeployableEntry(uri, name, DeployableSource.FILE, this, null);
+                deployableEntry.setDeployable(false);
+                addItemToContainer(deployableEntry, getContainerProperties(deployableEntry), false);
+            } else if (DeployableSource.MAVEN.equals(deployableSource)) {
+                MavenArtifactInfo mavenArtifactInfo = new MavenArtifactInfo(uri.toString(), null, null, null, null, REPOSITORY);
+                deployableEntry = new MavenDeployableEntry(uri, name, DeployableSource.MAVEN, this, null, mavenArtifactInfo);
+                deployableEntry.setDeployable(false);
+                addItemToContainer(deployableEntry, getContainerProperties(deployableEntry), false);
+            }
+        } else {
+            deployableEntry.setName(name);
+            final Item item = container.getItem(deployableEntry);
+            uiContext.getUI().access(new Runnable() {
+                @Override
+                public void run() {
+                    item.getItemProperty(DEPLOYABLE_NAME).setValue(name);
+                }
+            });
+        }
     }
 
     public void addItemToContainer(final DeployableEntry deployableEntry, final Map<String, Object> properties, final boolean expand) {

@@ -10,6 +10,11 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.deployable.all;
 
+import javax.annotation.PostConstruct;
+import java.util.Collections;
+
+import org.apache.felix.ipojo.annotations.Requires;
+
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
@@ -21,7 +26,6 @@ import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListene
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -32,11 +36,6 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TreeTable;
-
-import org.apache.felix.ipojo.annotations.Requires;
-
-import javax.annotation.PostConstruct;
-import java.util.Collections;
 
 /**
  * @author Mohammed Boukada
@@ -94,7 +93,7 @@ public class AllView extends AbstractDeployableContainer {
 
         TreeTable directoryTable = createDeployableTable(AbstractDeployableContainer.DEPLOYABLE_NAME, DIRECTORY_ITEM_ID, directoryContainer.getContainer());
         TreeTable mavenTable = createDeployableTable(AbstractDeployableContainer.DEPLOYABLE_NAME, MAVEN_ITEM_ID, mavenContainer.getContainer());
-        mavenTable.addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
+        //mavenTable.addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService));
 
         Button doButton = new Button("Do");
         doButton.addStyleName("default");

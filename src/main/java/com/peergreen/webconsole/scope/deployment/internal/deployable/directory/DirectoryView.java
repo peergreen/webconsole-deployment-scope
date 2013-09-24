@@ -29,18 +29,17 @@ import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.UIContext;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
-import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.repository.RepositoryManagerPanel;
 import com.peergreen.webconsole.scope.deployment.internal.manager.DeploymentViewManager;
-import com.vaadin.data.Item;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -66,6 +65,8 @@ public class DirectoryView extends AbstractDeployableContainer {
     private ArtifactModelManager artifactModelManager;
     @Inject
     private UIContext uiContext;
+    @Inject
+    private INotifierService notifierService;
     @Inject
     private DeploymentViewManager deploymentViewManager;
 
@@ -130,7 +131,7 @@ public class DirectoryView extends AbstractDeployableContainer {
         addComponent(repositoryInfo);
 
         getTree().addShortcutListener(new DeleteFileShortcutListener(deploymentViewManager, getTree(), "Delete", ShortcutAction.KeyCode.DELETE, null));
-        getTree().addExpandListener(new TreeItemExpandListener(this, directoryRepositoryService));
+        getTree().addExpandListener(new TreeItemExpandListener(this, directoryRepositoryService, repositoryManager));
 
         addComponent(getTree());
         setExpandRatio(getTree(), 1.5f);
@@ -157,16 +158,9 @@ public class DirectoryView extends AbstractDeployableContainer {
             "(repository.type=" + RepositoryType.FACADE + ")))")
     public void bindRepository(DirectoryRepositoryService repositoryService) throws URISyntaxException {
         final Repository repository = repositoryService.getAttributes().as(Repository.class);
-        final DeployableEntry deployableEntry = getDeployable(new URI(repository.getUrl()));
-        if (deployableEntry != null) {
-            deployableEntry.setName(repository.getName());
-            uiContext.getUI().access(new Runnable() {
-                @Override
-                public void run() {
-                    Item item = getContainer().getItem(deployableEntry);
-                    item.getItemProperty(DEPLOYABLE_NAME).setValue(repository.getName());
-                }
-            });
+        addRootItemToContainer(repository.getName(), new URI(repository.getUrl()));
+        if (isAttached()) {
+            notifierService.addNotification(String.format("Directory repository '%s' was added.", repository.getName()));
         }
     }
 
