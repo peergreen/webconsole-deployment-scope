@@ -104,7 +104,7 @@ public class DeploymentPlanPanel extends Panel implements DeployableContainer {
         toolBar.setWidth("100%");
 
         // Deployment Plan name
-        Label deploymentPlanNameLabel = new Label("Deployment plan name");
+        Label deploymentPlanNameLabel = new Label("Plan");
         toolBar.addComponent(deploymentPlanNameLabel);
         toolBar.setExpandRatio(deploymentPlanNameLabel, 1);
 

@@ -26,7 +26,7 @@ public class RepositoryEntry extends VerticalLayout {
 
     private Repository repository;
     private HorizontalLayout defaultView;
-    private HorizontalLayout detailsView;
+    private VerticalLayout detailsView;
 
     public RepositoryEntry(Repository repository) {
         this.repository = repository;
@@ -63,8 +63,19 @@ public class RepositoryEntry extends VerticalLayout {
 
     private void showDetailsView() {
         if (detailsView == null) {
-            detailsView = new HorizontalLayout();
+            detailsView = new VerticalLayout();
             detailsView.setWidth("100%");
+
+            Button hideDetails = new Button("Hide");
+            hideDetails.addStyleName("link");
+            hideDetails.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    showDefaultView();
+                }
+            });
+            detailsView.addComponent(hideDetails);
+            detailsView.setComponentAlignment(hideDetails, Alignment.TOP_RIGHT);
 
             GridLayout layout = new GridLayout(3, 1);
             layout.addComponent(new Label("<b>Name</b>", ContentMode.HTML));
@@ -82,18 +93,7 @@ public class RepositoryEntry extends VerticalLayout {
             layout.addComponent(new Label(repository.getType()));
 
             detailsView.addComponent(layout);
-            detailsView.setComponentAlignment(layout, Alignment.MIDDLE_LEFT);
-
-            Button hideDetails = new Button("Hide");
-            hideDetails.addStyleName("link");
-            hideDetails.addClickListener(new Button.ClickListener() {
-                @Override
-                public void buttonClick(Button.ClickEvent event) {
-                    showDefaultView();
-                }
-            });
-            detailsView.addComponent(hideDetails);
-            detailsView.setComponentAlignment(hideDetails, Alignment.TOP_RIGHT);
+            detailsView.setComponentAlignment(layout, Alignment.TOP_LEFT);
         }
 
         removeAllComponents();
