@@ -12,39 +12,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>com.peergreen.webconsole</groupId>
-    <artifactId>webconsole-pom</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../webconsole-pom/pom.xml</relativePath>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.peergreen</groupId>
+    <artifactId>peergreen-pom</artifactId>
+    <version>3.1</version>
+  </parent>
 
+  <groupId>com.peergreen.webconsole</groupId>
   <artifactId>deployment-scope</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <name>Peergreen Web Console :: Deployment scope and its extensions</name>
   <packaging>bundle</packaging>
-
-  <properties>
-    <ipojo.version>1.10.1</ipojo.version>
-  </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.peergreen.webconsole</groupId>
       <artifactId>web-console-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.peergreen.webconsole</groupId>
-      <artifactId>home-scope</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-server</artifactId>
-      <version>${vaadin.version}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.peergreen.webconsole</groupId>
+      <artifactId>home-scope</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ow2.util.log</groupId>
@@ -55,12 +51,11 @@
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-      <version>${ipojo.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo</artifactId>
-      <version>${ipojo.version}</version>
+      <version>1.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -79,4 +74,16 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.peergreen.webconsole</groupId>
+        <artifactId>web-console-bom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
