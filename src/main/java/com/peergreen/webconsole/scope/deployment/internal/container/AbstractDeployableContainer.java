@@ -314,11 +314,5 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     public ArtifactModelManager getArtifactModelManager() {
         return artifactModelManager;
     }
-
-    @Override
-    public void attach() {
-        super.attach();
-        updateTree();
-    }
 }
 
