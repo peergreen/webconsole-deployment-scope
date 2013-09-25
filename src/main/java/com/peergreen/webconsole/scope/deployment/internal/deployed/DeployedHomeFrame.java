@@ -13,6 +13,7 @@ package com.peergreen.webconsole.scope.deployment.internal.deployed;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.felix.ipojo.annotations.Requires;
 import org.ow2.util.log.Log;
 import org.ow2.util.log.LogFactory;
 
@@ -44,7 +45,7 @@ public class DeployedHomeFrame extends Table {
      */
     private static final Log LOGGER = LogFactory.getLog(DeployedHomeFrame.class);
 
-    @Inject
+    @Requires(proxy = false)
     private DeployedPanel deployedPanel;
     @Inject
     private DeploymentManager deploymentManager;
