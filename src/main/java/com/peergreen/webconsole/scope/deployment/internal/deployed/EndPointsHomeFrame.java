@@ -43,8 +43,8 @@ public class EndPointsHomeFrame extends Table {
 
     @PostConstruct
     public void init() {
-        addContainerProperty("Artifact", String.class, null);
         addContainerProperty("End points", VerticalLayout.class, null);
+        addContainerProperty("Artifact", String.class, null);
         setWidth("100%");
         setPageLength(10);
         setImmediate(true);
@@ -70,7 +70,7 @@ public class EndPointsHomeFrame extends Table {
             }
 
             if (endPointsLayout.getComponentCount() > 0) {
-                addItem(new Object[]{artifactModelManager.getArtifactModel(uri).getArtifact().name(), endPointsLayout}, i);
+                addItem(new Object[]{endPointsLayout, artifactModelManager.getArtifactModel(uri).getArtifact().name()}, i);
                 i++;
             }
         }

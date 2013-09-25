@@ -101,15 +101,16 @@ public class DeploymentScope extends VerticalLayout {
         uploader.addSucceededListener(fileUploader);
         uploader.addStartedListener(fileUploader);
         uploadLayout.addComponent(uploader);
+
         HorizontalLayout target = new HorizontalLayout();
-        Label addTo = new Label("Add to ");
-        addTo.addStyleName("v-caption");
-        option.addItem(DeployableContainerType.DEPLOYABLE.attribute());
-        option.addItem(DeployableContainerType.DEPLOYED.attribute());
-        option.addItem(DeployableContainerType.DEPLOYMENT_PLAN.attribute());
+        option.addContainerProperty("id", String.class, null);
+        option.setItemCaptionPropertyId("id");
+        option.addItem(DeployableContainerType.DEPLOYABLE.attribute()).getItemProperty("id").setValue("Add to deployables");
+        option.addItem(DeployableContainerType.DEPLOYED.attribute()).getItemProperty("id").setValue("Deploy");
+        option.addItem(DeployableContainerType.DEPLOYMENT_PLAN.attribute()).getItemProperty("id").setValue("Init a deployment plan");
         option.addStyleName("horizontal");
         option.select(DeployableContainerType.DEPLOYABLE.attribute());
-        target.addComponent(addTo);
+
         target.addComponent(option);
         uploadLayout.addComponent(target);
         toolBar.addComponent(uploadLayout);
