@@ -25,6 +25,7 @@ import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
+import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableEntry;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
@@ -67,6 +68,20 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
     private UIContext uiContext;
     private ArtifactModelManager artifactModelManager;
 
+    @Inject
+    public void setUiContext(UIContext uiContext) {
+        this.uiContext = uiContext;
+    }
+
+    public UIContext getUiContext() {
+        return uiContext;
+    }
+
+    @Inject
+    public void setArtifactModelManager(ArtifactModelManager artifactModelManager) {
+        this.artifactModelManager = artifactModelManager;
+    }
+
     protected AbstractDeployableContainer(DeployableSource deployableSource) {
         this.deployableSource = deployableSource;
 
@@ -101,11 +116,6 @@ public abstract class AbstractDeployableContainer extends VerticalLayout impleme
         tree.addItemClickListener(new TreeItemClickListener());
         tree.setItemDescriptionGenerator(new ItemDescription());
         fetching.setVisible(false);
-    }
-
-    protected void init(UIContext uiContext, ArtifactModelManager artifactModelManager) {
-        this.uiContext = uiContext;
-        this.artifactModelManager = artifactModelManager;
     }
 
     @Override

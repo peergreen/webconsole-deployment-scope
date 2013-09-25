@@ -19,7 +19,6 @@ import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
 
 import com.peergreen.deployment.ArtifactBuilder;
-import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
@@ -28,7 +27,6 @@ import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DeleteFileShortcutListener;
@@ -62,10 +60,6 @@ public class DirectoryView extends AbstractDeployableContainer {
     @Inject
     private ArtifactBuilder artifactBuilder;
     @Inject
-    private ArtifactModelManager artifactModelManager;
-    @Inject
-    private UIContext uiContext;
-    @Inject
     private INotifierService notifierService;
     @Inject
     private DeploymentViewManager deploymentViewManager;
@@ -76,8 +70,6 @@ public class DirectoryView extends AbstractDeployableContainer {
 
     @PostConstruct
     public void init() {
-        super.init(uiContext, artifactModelManager);
-
         File deploy = new File(System.getProperty("user.dir") + File.separator + "deploy");
         repositoryManager.addRepository(formatUrl(deploy), "Deploy", RepositoryType.DIRECTORY);
 
@@ -138,7 +130,7 @@ public class DirectoryView extends AbstractDeployableContainer {
     }
 
     protected void updateTree() {
-        uiContext.getUI().access(new Runnable() {
+        getUiContext().getUI().access(new Runnable() {
             @Override
             public void run() {
                 updateTree(directoryRepositoryService);

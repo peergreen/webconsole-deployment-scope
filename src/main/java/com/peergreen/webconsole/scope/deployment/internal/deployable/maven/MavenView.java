@@ -18,7 +18,6 @@ import org.apache.felix.ipojo.annotations.Bind;
 import org.apache.felix.ipojo.annotations.Requires;
 
 import com.peergreen.deployment.ArtifactBuilder;
-import com.peergreen.deployment.model.ArtifactModelManager;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.RepositoryManager;
 import com.peergreen.deployment.repository.RepositoryType;
@@ -26,7 +25,6 @@ import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.Inject;
-import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
@@ -54,13 +52,9 @@ public class MavenView extends AbstractDeployableContainer {
     private static final String CLEAR_FILTER = "Clear filters";
 
     @Inject
-    private UIContext uiContext;
-    @Inject
     private INotifierService notifierService;
     @Inject
     private ArtifactBuilder artifactBuilder;
-    @Inject
-    private ArtifactModelManager artifactModelManager;
     @Inject
     private DeploymentViewManager deploymentViewManager;
     @Inject
@@ -74,8 +68,6 @@ public class MavenView extends AbstractDeployableContainer {
 
     @PostConstruct
     public void init() throws URISyntaxException {
-        super.init(uiContext, artifactModelManager);
-
         repositoryManager.loadRepositoriesInCache();
         addRootItemToContainer("Peergreen Releases", new URI("https://forge.peergreen.com/repository/content/repositories/releases/"));
         addRootItemToContainer("Maven Central", new URI("http://repo1.maven.org/maven2/"));
@@ -145,7 +137,7 @@ public class MavenView extends AbstractDeployableContainer {
 
     @Override
     protected void updateTree() {
-        uiContext.getUI().access(new Runnable() {
+        getUiContext().getUI().access(new Runnable() {
             @Override
             public void run() {
                 updateTree(mavenRepositoryService);
