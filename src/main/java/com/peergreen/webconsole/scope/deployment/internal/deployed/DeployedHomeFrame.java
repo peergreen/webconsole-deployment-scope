@@ -53,6 +53,7 @@ public class DeployedHomeFrame extends Table {
     public DeployedHomeFrame() {
         setSizeFull();
         setImmediate(true);
+        setSelectable(true);
         setColumnHeaderMode(ColumnHeaderMode.HIDDEN);
     }
 
