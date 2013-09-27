@@ -20,6 +20,7 @@ import org.apache.felix.ipojo.annotations.Requires;
 import com.peergreen.deployment.ArtifactBuilder;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.RepositoryManager;
+import com.peergreen.deployment.repository.RepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.deployment.repository.view.Repository;
 import com.peergreen.webconsole.Extension;
@@ -30,6 +31,7 @@ import com.peergreen.webconsole.scope.deployment.internal.DeploymentActions;
 import com.peergreen.webconsole.scope.deployment.internal.actions.DoClickListener;
 import com.peergreen.webconsole.scope.deployment.internal.actions.FilterFiles;
 import com.peergreen.webconsole.scope.deployment.internal.container.AbstractDeployableContainer;
+import com.peergreen.webconsole.scope.deployment.internal.container.RepositoryServiceProvider;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.DeployableSource;
 import com.peergreen.webconsole.scope.deployment.internal.container.entry.TreeItemExpandListener;
 import com.peergreen.webconsole.scope.deployment.internal.deployable.Deployable;
@@ -47,7 +49,7 @@ import com.vaadin.ui.TextField;
 @Extension
 @ExtensionPoint("com.peergreen.webconsole.scope.deployment.internal.deployable.DeployablePanel.maven")
 @Deployable("maven")
-public class MavenView extends AbstractDeployableContainer {
+public class MavenView extends AbstractDeployableContainer implements RepositoryServiceProvider {
 
     private static final String CLEAR_FILTER = "Clear filters";
 
@@ -128,7 +130,7 @@ public class MavenView extends AbstractDeployableContainer {
         repositoryInfo.setComponentAlignment(getFetching(), Alignment.MIDDLE_LEFT);
         addComponent(repositoryInfo);
 
-        getTree().addExpandListener(new TreeItemExpandListener(this, mavenRepositoryService, repositoryManager));
+        getTree().addExpandListener(new TreeItemExpandListener(this, getRepositoryService(), repositoryManager));
         addComponent(getTree());
         setExpandRatio(getTree(), 1.5f);
 
@@ -158,5 +160,10 @@ public class MavenView extends AbstractDeployableContainer {
     @Bind(optional = true)
     public void bindRepositoryManagerPanel(RepositoryManagerPanel repositoryManagerPanel) {
         repositoryManagerPanel.setMavenContainer(this);
+    }
+
+    @Override
+    public RepositoryService getRepositoryService() {
+        return mavenRepositoryService;
     }
 }

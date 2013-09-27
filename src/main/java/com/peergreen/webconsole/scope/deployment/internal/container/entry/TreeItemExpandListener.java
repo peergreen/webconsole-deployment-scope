@@ -10,9 +10,13 @@
 
 package com.peergreen.webconsole.scope.deployment.internal.container.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.peergreen.deployment.repository.DirectoryRepositoryService;
 import com.peergreen.deployment.repository.MavenRepositoryService;
 import com.peergreen.deployment.repository.RepositoryManager;
+import com.peergreen.deployment.repository.RepositoryService;
 import com.peergreen.deployment.repository.RepositoryType;
 import com.peergreen.deployment.repository.maven.MavenArtifactInfo;
 import com.peergreen.deployment.repository.view.Repository;
@@ -30,23 +34,15 @@ import com.vaadin.ui.TreeTable;
 public class TreeItemExpandListener implements Tree.ExpandListener {
 
     private AbstractDeployableContainer deployableContainer;
-    private MavenRepositoryService mavenRepositoryService;
-    private DirectoryRepositoryService directoryRepositoryService;
+    private RepositoryService repositoryService;
     private RepositoryManager repositoryManager;
+    private List<DeployableEntry> fetchingRepositories = new ArrayList<>();
 
     public TreeItemExpandListener(AbstractDeployableContainer deployableContainer,
-                                  MavenRepositoryService mavenRepositoryService,
+                                  RepositoryService repositoryService,
                                   RepositoryManager repositoryManager) {
         this.deployableContainer = deployableContainer;
-        this.mavenRepositoryService = mavenRepositoryService;
-        this.repositoryManager = repositoryManager;
-    }
-
-    public TreeItemExpandListener(AbstractDeployableContainer deployableContainer,
-                                  DirectoryRepositoryService directoryRepositoryService,
-                                  RepositoryManager repositoryManager) {
-        this.deployableContainer = deployableContainer;
-        this.directoryRepositoryService = directoryRepositoryService;
+        this.repositoryService = repositoryService;
         this.repositoryManager = repositoryManager;
     }
 
@@ -60,13 +56,13 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
         if (DeployableSource.MAVEN.equals(deployableEntry.getSource())) {
             MavenDeployableEntry mavenDeployableEntry = (MavenDeployableEntry) deployableEntry;
             MavenArtifactInfo mavenArtifactInfo = mavenDeployableEntry.getArtifactInfo();
-            MavenDeployableFetcher fetcher = new MavenDeployableFetcher(deployableContainer, mavenRepositoryService);
+            MavenDeployableFetcher fetcher = new MavenDeployableFetcher(deployableContainer, (MavenRepositoryService) repositoryService);
             fetcher.setUri(deployableEntry.getUri());
             fetcher.setType(mavenArtifactInfo.type);
             fetcher.setParent(deployableEntry);
             fetcher.start();
         } else if (DeployableSource.FILE.equals(deployableEntry.getSource())) {
-            DirectoryDeployableFetcher fetcher = new DirectoryDeployableFetcher(deployableContainer, directoryRepositoryService);
+            DirectoryDeployableFetcher fetcher = new DirectoryDeployableFetcher(deployableContainer, (DirectoryRepositoryService) repositoryService);
             fetcher.setUri(deployableEntry.getUri());
             fetcher.setParent(deployableEntry);
             fetcher.start();
