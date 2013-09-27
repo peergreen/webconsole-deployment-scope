@@ -71,7 +71,7 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
 
     private void fetchRepository(final DeployableEntry deployableEntry, final Tree.ExpandEvent event) {
         // it is root element --> repository entry
-        if (!containsRepository(deployableEntry.getUri().toString())) {
+        if (canFetchRepository(deployableEntry)) {
             ConfirmDialog.show(event.getConnector().getUI(),
                     String.format("Download %s index file(s)", deployableEntry.getName()),
                     new Label(String.format("Would you like to download %s index files ? This operation may takes a few minutes", deployableEntry.getName())),
@@ -92,6 +92,7 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
                                     String name = deployableEntry.getName() + " [Updating index ...]";
                                     deployableContainer.addRootItemToContainer(name, deployableEntry.getUri());
                                     repositoryManager.addRepository(deployableEntry.getUri().toString(), oldName, repoType);
+                                    fetchingRepositories.add(deployableEntry);
                                     TreeTable tree = (TreeTable) event.getSource();
                                     tree.setCollapsed(event.getItemId(), true);
                                 }
@@ -101,12 +102,15 @@ public class TreeItemExpandListener implements Tree.ExpandListener {
         }
     }
 
-    private boolean containsRepository(String url) {
+    private boolean canFetchRepository(DeployableEntry deployableEntry) {
         for (Repository repository : repositoryManager.getRepositories()) {
-            if (repository.getUrl().equals(url)) {
-                return true;
+            if (repository.getUrl().equals(deployableEntry.getUri().toString())) {
+                if (fetchingRepositories.contains(deployableEntry)) {
+                    fetchingRepositories.remove(deployableEntry);
+                }
+                return false;
             }
         }
-        return false;
+        return !fetchingRepositories.contains(deployableEntry);
     }
 }
