@@ -52,7 +52,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Extension
 @ExtensionPoint("com.peergreen.webconsole.scope")
-@Scope("deployment")
+@Scope(value = "deployment", iconClass = "icon-deployment")
 public class DeploymentScope extends VerticalLayout {
 
     @Inject
