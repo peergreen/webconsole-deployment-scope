@@ -91,11 +91,11 @@ public class MavenView extends AbstractDeployableContainer implements Repository
         header.addComponent(filterA);
         header.setComponentAlignment(filterA, Alignment.TOP_LEFT);
 
-        final TextField filterV = new TextField();
-        filterV.setInputPrompt("Filter by version");
-        filterV.addTextChangeListener(new FilterFiles(MVN_VERSION, getContainer()));
-        header.addComponent(filterV);
-        header.setComponentAlignment(filterV, Alignment.TOP_LEFT);
+//        final TextField filterV = new TextField();
+//        filterV.setInputPrompt("Filter by version");
+//        filterV.addTextChangeListener(new FilterFiles(MVN_VERSION, getContainer()));
+//        header.addComponent(filterV);
+//        header.setComponentAlignment(filterV, Alignment.TOP_LEFT);
 
         HorizontalLayout actionArea = new HorizontalLayout();
         final NativeSelect actionSelection = new NativeSelect();
