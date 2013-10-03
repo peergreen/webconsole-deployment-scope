@@ -75,16 +75,16 @@ public class DirectoryView extends AbstractDeployableContainer implements Reposi
         File deploy = new File(System.getProperty("user.dir") + File.separator + "deploy");
         repositoryManager.addRepository(formatUrl(deploy), "Deploy", RepositoryType.DIRECTORY);
 
+        File m2 = new File(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository");
+        if (m2.exists()) {
+            repositoryManager.addRepository(formatUrl(m2), "Local M2 repository", RepositoryType.DIRECTORY);
+        }
+
         File tmp = new File(Constants.STORAGE_DIRECTORY);
         if (!tmp.exists()) {
             tmp.mkdirs();
         }
         repositoryManager.addRepository(formatUrl(tmp), "Temporary directory", RepositoryType.DIRECTORY);
-
-        File m2 = new File(System.getProperty("user.home") + File.separator + ".m2" + File.separator + "repository");
-        if (m2.exists()) {
-            repositoryManager.addRepository(formatUrl(m2), "Local M2 repository", RepositoryType.DIRECTORY);
-        }
 
         HorizontalLayout header = new HorizontalLayout();
         header.setWidth("100%");
