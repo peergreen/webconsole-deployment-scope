@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
 import org.apache.felix.ipojo.annotations.StaticServiceProperty;
 
 import com.peergreen.deployment.Artifact;
@@ -47,9 +46,7 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
     private DeployableContainer deployedContainer;
     private DeployableContainer deploymentPlanContainer;
 
-    @Requires
     private Deployer deployer;
-    @Requires
     private INotifierService notifierService;
 
     public BaseDeploymentViewManager(HorizontalLayout framesContainer) {
@@ -58,6 +55,14 @@ public class BaseDeploymentViewManager implements DeploymentViewManager {
 
     public void setDeployableContainer(DeployableContainer deployableContainer) {
         this.deployableContainer = deployableContainer;
+    }
+
+    public void setDeployer(Deployer deployer) {
+        this.deployer = deployer;
+    }
+
+    public void setNotifierService(INotifierService notifierService) {
+        this.notifierService = notifierService;
     }
 
     public void setDeployedContainer(DeployableContainer deployedContainer) {

@@ -27,17 +27,19 @@ import com.peergreen.webconsole.Constants;
 import com.peergreen.webconsole.Extension;
 import com.peergreen.webconsole.ExtensionPoint;
 import com.peergreen.webconsole.HelpOverlay;
-import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.Inject;
 import com.peergreen.webconsole.Link;
 import com.peergreen.webconsole.Scope;
 import com.peergreen.webconsole.UIContext;
 import com.peergreen.webconsole.Unlink;
+import com.peergreen.webconsole.notifier.INotifierService;
 import com.peergreen.webconsole.scope.deployment.internal.components.FileUploader;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainer;
 import com.peergreen.webconsole.scope.deployment.internal.container.DeployableContainerType;
 import com.peergreen.webconsole.scope.deployment.internal.dd.DeploymentPlanMakerDropHandler;
 import com.peergreen.webconsole.scope.deployment.internal.manager.BaseDeploymentViewManager;
+import com.peergreen.webconsole.scope.deployment.internal.service.BaseDeployer;
+import com.peergreen.webconsole.scope.deployment.internal.service.Deployer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DragAndDropWrapper;
@@ -61,6 +63,8 @@ public class DeploymentScope extends VerticalLayout {
     private INotifierService notifierService;
     @Inject
     private UIContext uiContext;
+    @Requires(proxy = false)
+    private Deployer deployer;
     @Requires(from = "com.peergreen.webconsole.scope.deployment.internal.manager.BaseDeploymentViewManager")
     private Factory deploymentViewManagerFactory;
 
@@ -158,6 +162,9 @@ public class DeploymentScope extends VerticalLayout {
 
     private BaseDeploymentViewManager createDeploymentViewManager() {
         BaseDeploymentViewManager baseDeploymentViewManager = new BaseDeploymentViewManager(framesContainer);
+        ((BaseDeployer) deployer).setNotifierService(notifierService);
+        baseDeploymentViewManager.setDeployer(deployer);
+        baseDeploymentViewManager.setNotifierService(notifierService);
         Dictionary<String, Object> properties = new Hashtable<>();
         properties.put(Constants.UI_ID, uiContext.getUIId());
         properties.put("instance.object", baseDeploymentViewManager);

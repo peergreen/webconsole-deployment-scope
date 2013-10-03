@@ -42,8 +42,11 @@ public class BaseDeployer implements Deployer {
     private ArtifactBuilder artifactBuilder;
     @Requires
     private DeploymentManager deploymentManager;
-    @Requires
     private INotifierService notifierService;
+
+    public void setNotifierService(INotifierService notifierService) {
+        this.notifierService = notifierService;
+    }
 
     @Override
     public void process(Artifact artifact, DeploymentMode deploymentMode) {
