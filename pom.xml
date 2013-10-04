@@ -25,6 +25,13 @@
   <name>Peergreen Web Console :: Deployment scope and its extensions</name>
   <packaging>bundle</packaging>
 
+  <scm>
+    <connection>scm:git:https://forge.peergreen.com/git/git/webconsole/deployment-scope.git</connection>
+    <developerConnection>scm:git:https://forge.peergreen.com/git/git/webconsole/deployment-scope.git</developerConnection>
+    <url>https://forge.peergreen.com/git/summary/?r=webconsole/deployment-scope.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>com.peergreen.webconsole</groupId>
@@ -36,11 +43,16 @@
       <artifactId>vaadin-server</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>com.peergreen.webconsole</groupId>
       <artifactId>home-scope</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0-M1</version>
     </dependency>
     <dependency>
       <groupId>org.ow2.util.log</groupId>
@@ -50,12 +62,9 @@
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.ipojo</artifactId>
       <version>1.10.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -71,7 +80,8 @@
     <dependency>
       <groupId>com.peergreen.deployment</groupId>
       <artifactId>deployment-repository-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0-M1</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -80,7 +90,7 @@
       <dependency>
         <groupId>com.peergreen.webconsole</groupId>
         <artifactId>web-console-bom</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-M1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
