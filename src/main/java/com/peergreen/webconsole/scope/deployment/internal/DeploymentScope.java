@@ -111,7 +111,7 @@ public class DeploymentScope extends VerticalLayout {
         option.setItemCaptionPropertyId("id");
         option.addItem(DeployableContainerType.DEPLOYABLE.attribute()).getItemProperty("id").setValue("Add to deployables");
         option.addItem(DeployableContainerType.DEPLOYED.attribute()).getItemProperty("id").setValue("Deploy");
-        option.addItem(DeployableContainerType.DEPLOYMENT_PLAN.attribute()).getItemProperty("id").setValue("Init a deployment plan");
+        option.addItem(DeployableContainerType.DEPLOYMENT_PLAN.attribute()).getItemProperty("id").setValue("Create a deployment plan");
         option.addStyleName("horizontal");
         option.select(DeployableContainerType.DEPLOYABLE.attribute());
 
